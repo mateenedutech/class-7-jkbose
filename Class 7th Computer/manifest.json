@@ -1,0 +1,28 @@
+{
+  "name": "JKBOSE Class 7 Computer Science",
+  "short_name": "CS7 JKBOSE",
+  "description": "Interactive Computer Science Learning App for Class 7 by Mateen Yousuf",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a0e1a",
+  "theme_color": "#00f5ff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='32' fill='%230a0e1a'/><text y='120' x='96' text-anchor='middle' font-size='100'>💻</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='80' fill='%230a0e1a'/><text y='320' x='256' text-anchor='middle' font-size='260'>💻</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education"],
+  "lang": "en-IN",
+  "scope": "./",
+  "screenshots": []
+}

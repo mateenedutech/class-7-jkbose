@@ -1,0 +1,20 @@
+{
+  "name": "JKBOSE Class 7 English Learning App",
+  "short_name": "Class7 English",
+  "description": "Interactive English Learning App for JKBOSE Class 7 students",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#6c63ff",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='24' fill='%236c63ff'/><text x='96' y='130' font-size='100' text-anchor='middle'>📚</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["education"],
+  "lang": "en",
+  "scope": "./"
+}

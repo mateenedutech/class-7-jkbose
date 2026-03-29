@@ -1,0 +1,19 @@
+{
+  "name": "Class 7 Science Learning App - JKBOSE",
+  "short_name": "Sci7 JKBOSE",
+  "description": "Interactive JKBOSE Class 7 Science app by Mateen Yousuf — NEP 2020 aligned",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f0c29",
+  "theme_color": "#6c63ff",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='32' fill='%236c63ff'/><text y='130' x='96' font-size='110' text-anchor='middle'>🔬</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["education"],
+  "lang": "en-IN"
+}

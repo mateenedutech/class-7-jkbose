@@ -1,0 +1,3365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a1a2e">
+<meta name="description" content="JKBOSE Class 7 Social Science Interactive Learning App by Mateen Yousuf">
+<link rel="manifest" href="manifest.json">
+<title>Class 7 Social Science | JKBOSE</title>
+<style>
+/* ===== CSS VARIABLES ===== */
+:root {
+  --primary: #0f3460;
+  --secondary: #16213e;
+  --accent: #e94560;
+  --gold: #f5a623;
+  --green: #27ae60;
+  --purple: #8e44ad;
+  --teal: #1abc9c;
+  --bg: #0a0a1a;
+  --surface: #16213e;
+  --surface2: #1a2744;
+  --text: #e8eaf6;
+  --text-muted: #90a4ae;
+  --border: rgba(255,255,255,0.1);
+  --shadow: 0 8px 32px rgba(0,0,0,0.4);
+  --radius: 16px;
+  --font-display: 'Georgia', serif;
+  --font-body: 'Segoe UI', sans-serif;
+  --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+
+[data-theme="light"] {
+  --bg: #f0f4ff;
+  --surface: #ffffff;
+  --surface2: #e8eeff;
+  --text: #1a1a2e;
+  --text-muted: #546e7a;
+  --border: rgba(0,0,0,0.1);
+  --shadow: 0 8px 32px rgba(0,0,0,0.12);
+}
+
+/* ===== RESET & BASE ===== */
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background var(--transition), color var(--transition);
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+/* ===== SCREENS ===== */
+.screen { display:none; min-height:100vh; }
+.screen.active { display:block; }
+
+/* ===== TITLE SCREEN ===== */
+#titleScreen {
+  position: relative;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0a0a1a 0%, #0f3460 50%, #1a0a2e 100%);
+}
+#titleScreen.active { display: flex; }
+
+/* Animated bg */
+.title-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.title-bg::before {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(233,69,96,0.15) 0%, transparent 70%);
+  top: -200px; left: -200px;
+  animation: pulse-bg 6s ease-in-out infinite;
+}
+.title-bg::after {
+  content: '';
+  position: absolute;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(26,188,156,0.1) 0%, transparent 70%);
+  bottom: -150px; right: -150px;
+  animation: pulse-bg 8s ease-in-out infinite reverse;
+}
+@keyframes pulse-bg {
+  0%,100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+
+/* Floating particles */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  animation: float-particle linear infinite;
+  pointer-events: none;
+}
+@keyframes float-particle {
+  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+}
+
+/* Globe SVG */
+.globe-container {
+  position: absolute;
+  top: 10px; right: 20px;
+  opacity: 0.15;
+  animation: spin-globe 30s linear infinite;
+  width: 200px; height: 200px;
+}
+@keyframes spin-globe {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Title content */
+.title-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 20px;
+  animation: fade-in-up 1s ease forwards;
+}
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Author photo */
+.author-photo-wrap {
+  margin-bottom: 20px;
+  position: relative;
+  display: inline-block;
+}
+.author-photo {
+  width: 130px; height: 130px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--gold);
+  box-shadow: 0 0 0 8px rgba(245,166,35,0.2), 0 0 40px rgba(245,166,35,0.4);
+  animation: glow-photo 3s ease-in-out infinite;
+  display: block;
+}
+.author-photo-placeholder {
+  width: 130px; height: 130px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 60px;
+  border: 4px solid var(--gold);
+  box-shadow: 0 0 0 8px rgba(245,166,35,0.2), 0 0 40px rgba(245,166,35,0.4);
+  animation: glow-photo 3s ease-in-out infinite;
+  margin: 0 auto;
+}
+@keyframes glow-photo {
+  0%,100% { box-shadow: 0 0 0 8px rgba(245,166,35,0.2), 0 0 40px rgba(245,166,35,0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(245,166,35,0.35), 0 0 60px rgba(245,166,35,0.6); }
+}
+
+.app-badge {
+  display: inline-block;
+  background: var(--accent);
+  color: white;
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.title-main {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 6px;
+  text-shadow: 0 0 30px rgba(233,69,96,0.5);
+}
+.title-sub {
+  font-size: clamp(16px, 3vw, 22px);
+  color: var(--gold);
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.author-info {
+  margin-bottom: 30px;
+  animation: fade-in-up 1s ease 0.3s both;
+}
+.author-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gold);
+  font-family: var(--font-display);
+}
+.author-role, .author-dept {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.subjects-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+  animation: fade-in-up 1s ease 0.5s both;
+}
+.subject-tag {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  display: flex; align-items: center; gap: 6px;
+}
+
+.btn-start {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, var(--accent), #c0392b);
+  color: white;
+  border: none;
+  padding: 16px 40px;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 1px;
+  box-shadow: 0 8px 30px rgba(233,69,96,0.5);
+  transition: var(--transition);
+  animation: fade-in-up 1s ease 0.7s both, pulse-btn 2s ease-in-out 2s infinite;
+}
+.btn-start:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 40px rgba(233,69,96,0.7);
+}
+@keyframes pulse-btn {
+  0%,100% { box-shadow: 0 8px 30px rgba(233,69,96,0.5); }
+  50% { box-shadow: 0 8px 50px rgba(233,69,96,0.9); }
+}
+
+/* Monuments row */
+.monuments {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 30px;
+  opacity: 0.4;
+  font-size: 32px;
+  animation: fade-in-up 1s ease 0.9s both;
+}
+
+/* ===== MAIN APP ===== */
+#appScreen { display: none; }
+#appScreen.active { display: block; }
+
+/* ===== NAV BAR ===== */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(22,33,62,0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-brand {
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer;
+}
+.nav-brand-icon { font-size: 24px; }
+.nav-brand-text { font-size: 16px; font-weight: 700; color: var(--text); }
+.nav-brand-sub { font-size: 11px; color: var(--text-muted); }
+
+.nav-actions { display: flex; gap: 8px; align-items: center; }
+.nav-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: var(--transition);
+  display: flex; align-items: center; gap: 6px;
+}
+.nav-btn:hover { background: var(--surface2); border-color: var(--accent); }
+.nav-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+
+/* ===== BOTTOM NAV ===== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 999;
+  background: rgba(22,33,62,0.97);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  display: flex;
+  padding: 8px 0 12px;
+}
+.bottom-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+  padding: 4px;
+  transition: var(--transition);
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+}
+.bottom-nav-item.active { color: var(--accent); }
+.bottom-nav-item:hover { color: var(--text); }
+.bottom-nav-icon { font-size: 20px; }
+.bottom-nav-label { font-size: 10px; }
+
+/* ===== MAIN CONTENT ===== */
+.main-content {
+  padding: 20px;
+  padding-bottom: 90px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ===== TAB PANELS ===== */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ===== HERO SECTION ===== */
+.hero-section {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 24px;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.hero-section::before {
+  content: '🌍';
+  position: absolute;
+  right: 20px; top: 20px;
+  font-size: 80px;
+  opacity: 0.15;
+  animation: float 4s ease-in-out infinite;
+}
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.hero-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.hero-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 16px; }
+.hero-stats { display: flex; gap: 20px; flex-wrap: wrap; }
+.stat-item { text-align: center; }
+.stat-num { font-size: 24px; font-weight: 700; color: var(--gold); }
+.stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+/* ===== SECTION TITLES ===== */
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+}
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ===== CHAPTER CARDS ===== */
+.chapters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.chapter-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.chapter-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+  border-color: var(--accent);
+}
+.chapter-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+}
+.chapter-card.history::before { background: var(--gold); }
+.chapter-card.geography::before { background: var(--green); }
+.chapter-card.civics::before { background: var(--purple); }
+
+.chapter-num {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.chapter-title-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+.chapter-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.chapter-subject-tag {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+.chapter-subject-tag.history { background: rgba(245,166,35,0.15); color: var(--gold); }
+.chapter-subject-tag.geography { background: rgba(39,174,96,0.15); color: var(--green); }
+.chapter-subject-tag.civics { background: rgba(142,68,173,0.15); color: var(--purple); }
+
+.chapter-progress-bar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+.chapter-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teal), var(--accent));
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+.chapter-arrow { color: var(--text-muted); font-size: 18px; }
+
+/* ===== QUICK ACCESS ===== */
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.quick-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.quick-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+.quick-icon { font-size: 28px; margin-bottom: 8px; }
+.quick-label { font-size: 12px; font-weight: 600; }
+
+/* ===== CHAPTER DETAIL SCREEN ===== */
+#chapterScreen {
+  display: none;
+  min-height: 100vh;
+  background: var(--bg);
+}
+#chapterScreen.active { display: block; }
+
+.chapter-header {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  padding: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.back-btn {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: white;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--transition);
+}
+.back-btn:hover { background: rgba(255,255,255,0.2); }
+.chapter-header-info { flex: 1; }
+.chapter-header-num { font-size: 11px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 2px; }
+.chapter-header-title { font-size: 18px; font-weight: 700; color: white; }
+
+/* Chapter section tabs */
+.section-tabs {
+  display: flex;
+  overflow-x: auto;
+  gap: 8px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  scrollbar-width: none;
+}
+.section-tabs::-webkit-scrollbar { display: none; }
+.section-tab {
+  white-space: nowrap;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 13px;
+  transition: var(--transition);
+  font-family: var(--font-body);
+}
+.section-tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+.section-tab:hover:not(.active) { border-color: var(--text-muted); color: var(--text); }
+
+.chapter-content { padding: 20px; padding-bottom: 40px; max-width: 800px; margin: 0 auto; }
+.content-section { display: none; }
+.content-section.active { display: block; }
+
+/* ===== CONCEPT SECTION ===== */
+.concept-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+  line-height: 1.8;
+  font-size: 15px;
+}
+.concept-box h3 {
+  color: var(--gold);
+  font-size: 16px;
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.concept-box p { color: var(--text); margin-bottom: 10px; }
+.concept-box ul { padding-left: 20px; color: var(--text); }
+.concept-box ul li { margin-bottom: 6px; }
+.key-term {
+  display: inline-block;
+  background: rgba(233,69,96,0.15);
+  color: var(--accent);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+/* ===== DIAGRAM SECTION ===== */
+.diagram-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+.diagram-title { font-size: 14px; font-weight: 600; margin-bottom: 16px; color: var(--text-muted); }
+
+/* Timeline */
+.timeline {
+  position: relative;
+  padding: 10px 0;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0; bottom: 0;
+  width: 2px;
+  background: var(--border);
+  transform: translateX(-50%);
+}
+.timeline-item {
+  display: flex;
+  margin-bottom: 24px;
+  position: relative;
+}
+.timeline-item:nth-child(odd) { flex-direction: row-reverse; }
+.timeline-content {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  width: calc(50% - 30px);
+  text-align: left;
+  transition: var(--transition);
+}
+.timeline-content:hover { border-color: var(--gold); }
+.timeline-dot {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px; height: 14px;
+  background: var(--gold);
+  border-radius: 50%;
+  border: 3px solid var(--bg);
+  top: 14px;
+}
+.timeline-year { font-size: 11px; color: var(--gold); font-weight: 700; margin-bottom: 4px; }
+.timeline-event { font-size: 13px; color: var(--text); }
+
+/* Mind Map */
+.mindmap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.mindmap-center {
+  background: linear-gradient(135deg, var(--accent), var(--primary));
+  color: white;
+  padding: 14px 24px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 15px;
+}
+.mindmap-branches {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.mindmap-node {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  transition: var(--transition);
+}
+.mindmap-node:hover { border-color: var(--teal); color: var(--teal); }
+
+/* ===== FLASHCARDS ===== */
+.flashcard-container {
+  perspective: 1000px;
+  margin-bottom: 20px;
+}
+.flashcard {
+  width: 100%;
+  min-height: 200px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s ease;
+  cursor: pointer;
+}
+.flashcard.flipped { transform: rotateY(180deg); }
+.flashcard-front, .flashcard-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+}
+.flashcard-front {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border: 1px solid var(--border);
+}
+.flashcard-back {
+  background: linear-gradient(135deg, var(--accent), #c0392b);
+  transform: rotateY(180deg);
+}
+.flashcard-label { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.6; margin-bottom: 12px; }
+.flashcard-text { font-size: 17px; font-weight: 600; line-height: 1.5; }
+.flashcard-hint { font-size: 12px; opacity: 0.7; margin-top: 12px; }
+
+.flashcard-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.fc-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: var(--transition);
+}
+.fc-btn:hover { background: var(--surface2); border-color: var(--accent); }
+.fc-counter { font-size: 14px; color: var(--text-muted); }
+
+/* ===== QUIZ ===== */
+.quiz-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 16px;
+}
+.quiz-question-num { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+.quiz-question-text { font-size: 17px; font-weight: 600; margin-bottom: 20px; line-height: 1.5; }
+.quiz-options { display: flex; flex-direction: column; gap: 10px; }
+.quiz-option {
+  padding: 14px 18px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 14px;
+  background: var(--surface2);
+  color: var(--text);
+  text-align: left;
+}
+.quiz-option:hover:not(.selected) { border-color: var(--teal); }
+.quiz-option.correct { border-color: var(--green); background: rgba(39,174,96,0.15); color: var(--green); }
+.quiz-option.wrong { border-color: var(--accent); background: rgba(233,69,96,0.15); color: var(--accent); }
+.quiz-option.selected { pointer-events: none; }
+
+.quiz-feedback {
+  margin-top: 16px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  display: none;
+}
+.quiz-feedback.show { display: block; }
+.quiz-feedback.correct { background: rgba(39,174,96,0.15); color: var(--green); border: 1px solid var(--green); }
+.quiz-feedback.wrong { background: rgba(233,69,96,0.15); color: var(--accent); border: 1px solid var(--accent); }
+
+.quiz-nav { display: flex; justify-content: space-between; margin-top: 16px; }
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), #c0392b);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: var(--transition);
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(233,69,96,0.4); }
+.btn-secondary {
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: var(--transition);
+}
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+.quiz-score-box {
+  text-align: center;
+  padding: 30px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: none;
+}
+.quiz-score-box.show { display: block; }
+.score-circle {
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--accent));
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 28px; font-weight: 700; color: white;
+}
+.score-msg { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.score-sub { font-size: 14px; color: var(--text-muted); }
+
+/* ===== REFLECTION / COMPETENCY ===== */
+.reflection-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 14px;
+}
+.reflection-q { font-size: 15px; font-weight: 600; margin-bottom: 12px; line-height: 1.5; }
+.reflection-input {
+  width: 100%;
+  min-height: 100px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  resize: vertical;
+  transition: var(--transition);
+}
+.reflection-input:focus { outline: none; border-color: var(--teal); }
+.save-note-btn {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background: var(--teal);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: var(--transition);
+}
+.save-note-btn:hover { opacity: 0.85; }
+
+/* ===== SIMULATION ===== */
+.simulation-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.sim-header {
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(233,69,96,0.2), rgba(15,52,96,0.5));
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.sim-header h3 { font-size: 15px; font-weight: 700; }
+.sim-body { padding: 20px; }
+
+/* Empire map simulation */
+.empire-map {
+  background: linear-gradient(135deg, #1a3a1a, #0a1a0a);
+  border-radius: 10px;
+  padding: 20px;
+  position: relative;
+  min-height: 250px;
+  overflow: hidden;
+  font-size: 12px;
+}
+.empire-region {
+  position: absolute;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  transition: all 0.8s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+.empire-region:hover { z-index: 10; transform: scale(1.05); }
+
+/* Resource chart */
+.resource-bars { display: flex; flex-direction: column; gap: 14px; }
+.resource-item { }
+.resource-label {
+  display: flex; justify-content: space-between;
+  font-size: 13px; margin-bottom: 6px;
+}
+.resource-bar {
+  height: 12px;
+  background: var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.resource-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 1s ease;
+}
+
+/* Democracy game */
+.democracy-game { }
+.vote-scenario {
+  background: var(--surface2);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.vote-scenario-q { font-size: 14px; font-weight: 600; margin-bottom: 10px; }
+.vote-options { display: flex; flex-direction: column; gap: 8px; }
+.vote-opt {
+  padding: 10px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: var(--transition);
+}
+.vote-opt:hover { border-color: var(--purple); color: var(--purple); }
+.vote-opt.chosen { border-color: var(--green); background: rgba(39,174,96,0.15); color: var(--green); pointer-events: none; }
+.vote-result { margin-top: 10px; font-size: 13px; color: var(--text-muted); display: none; }
+.vote-result.show { display: block; }
+
+/* ===== MAP LAB ===== */
+.map-container {
+  background: linear-gradient(135deg, #0a2a0a, #1a3a2a);
+  border-radius: 12px;
+  padding: 20px;
+  min-height: 300px;
+  position: relative;
+  overflow: hidden;
+}
+.map-india-svg { width: 100%; max-width: 400px; margin: 0 auto; display: block; }
+.map-pin {
+  cursor: pointer;
+  animation: pulse-pin 2s ease-in-out infinite;
+}
+@keyframes pulse-pin {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* ===== PROGRESS DASHBOARD ===== */
+.progress-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.progress-stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+}
+.progress-stat-val { font-size: 28px; font-weight: 700; color: var(--gold); }
+.progress-stat-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+.progress-chapters { }
+.progress-ch-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 12px;
+}
+.progress-ch-num {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+  flex-shrink: 0;
+}
+.progress-ch-info { flex: 1; }
+.progress-ch-name { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+.progress-ch-bar {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-ch-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--teal), var(--accent));
+  transition: width 0.5s ease;
+}
+.progress-ch-pct { font-size: 12px; color: var(--text-muted); flex-shrink: 0; }
+
+/* ===== BADGES ===== */
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.badge-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  transition: var(--transition);
+}
+.badge-card.earned { border-color: var(--gold); }
+.badge-card.earned:hover { transform: translateY(-2px); }
+.badge-icon { font-size: 36px; margin-bottom: 8px; }
+.badge-name { font-size: 12px; font-weight: 600; }
+.badge-desc { font-size: 10px; color: var(--text-muted); margin-top: 3px; }
+.badge-card:not(.earned) { opacity: 0.4; filter: grayscale(1); }
+
+/* ===== NOTES ===== */
+.notes-toolbar {
+  display: flex; gap: 8px; margin-bottom: 16px;
+}
+.notes-area {
+  width: 100%;
+  min-height: 200px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.8;
+  resize: vertical;
+  transition: var(--transition);
+}
+.notes-area:focus { outline: none; border-color: var(--teal); }
+
+.saved-notes { margin-top: 20px; }
+.saved-note {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  position: relative;
+}
+.saved-note-meta { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; }
+.saved-note-text { font-size: 14px; line-height: 1.6; }
+.saved-note-del {
+  position: absolute; right: 12px; top: 12px;
+  background: none; border: none; color: var(--text-muted);
+  cursor: pointer; font-size: 16px; transition: var(--transition);
+}
+.saved-note-del:hover { color: var(--accent); }
+
+/* ===== RANDOM Q ===== */
+.random-q-card {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.random-q-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
+.random-q-text { font-size: 18px; font-weight: 600; line-height: 1.6; }
+.random-q-source { font-size: 12px; color: var(--gold); margin-top: 12px; }
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed;
+  bottom: 80px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  padding: 10px 20px;
+  font-size: 13px;
+  z-index: 9999;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.success { border-color: var(--green); color: var(--green); }
+.toast.error { border-color: var(--accent); color: var(--accent); }
+
+/* ===== PWA INSTALL ===== */
+.install-banner {
+  display: none;
+  position: fixed;
+  bottom: 70px; left: 10px; right: 10px;
+  z-index: 998;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  align-items: center;
+  gap: 12px;
+}
+.install-banner.show { display: flex; }
+.install-banner-text { flex: 1; font-size: 13px; }
+.install-banner-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.install-close { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 18px; }
+
+/* ===== CASE STUDY ===== */
+.case-study-box {
+  background: var(--surface);
+  border-left: 4px solid var(--teal);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.case-study-box h4 { color: var(--teal); margin-bottom: 10px; font-size: 15px; }
+.case-study-box p { font-size: 14px; line-height: 1.8; color: var(--text); margin-bottom: 8px; }
+.case-activity {
+  background: var(--surface2);
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 14px;
+}
+.case-activity h5 { font-size: 14px; color: var(--gold); margin-bottom: 10px; }
+.case-activity p { font-size: 13px; color: var(--text-muted); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+  .timeline::before { left: 20px; }
+  .timeline-item { flex-direction: column !important; padding-left: 40px; }
+  .timeline-content { width: 100%; }
+  .timeline-dot { left: 20px; }
+  .hero-stats { gap: 12px; }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes slide-in-right {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+.slide-in { animation: slide-in-right 0.4s ease forwards; }
+
+@keyframes bounce-in {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.bounce-in { animation: bounce-in 0.5s ease forwards; }
+</style>
+</head>
+<body>
+
+<!-- ===== TITLE SCREEN ===== -->
+<div id="titleScreen" class="screen active">
+  <div class="title-bg"></div>
+  
+  <!-- Floating globe -->
+  <div class="globe-container">
+    <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="100" cy="100" r="90" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+      <ellipse cx="100" cy="100" rx="50" ry="90" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+      <ellipse cx="100" cy="100" rx="90" ry="30" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+      <ellipse cx="100" cy="100" rx="90" ry="55" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <line x1="10" y1="100" x2="190" y2="100" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <line x1="100" y1="10" x2="100" y2="190" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+    </svg>
+  </div>
+  
+  <!-- Particles -->
+  <div id="particles"></div>
+
+  <div class="title-content">
+    <div class="app-badge">📚 JKBOSE | NEP 2020</div>
+    
+    <div class="author-photo-wrap">
+      <img src="author.jpg" alt="Mateen Yousuf" class="author-photo" onerror="this.style.display='none';document.getElementById('authorPlaceholder').style.display='flex'">
+      <div id="authorPlaceholder" class="author-photo-placeholder" style="display:none">👨‍🏫</div>
+    </div>
+    
+    <div class="author-info">
+      <div class="author-name">Mateen Yousuf</div>
+      <div class="author-role">Teacher | School Education Department</div>
+      <div class="author-dept">Jammu and Kashmir</div>
+    </div>
+    
+    <h1 class="title-main">Class 7 Social Science<br>Learning App</h1>
+    <div class="title-sub">History · Geography · Civics</div>
+    
+    <div class="subjects-row">
+      <span class="subject-tag">🏺 Medieval India</span>
+      <span class="subject-tag">🌍 Environment & Resources</span>
+      <span class="subject-tag">🏛 Democracy & Governance</span>
+    </div>
+    
+    <button class="btn-start" onclick="startApp()">
+      🚀 Start Learning
+    </button>
+    
+    <div class="monuments">🕌 🏰 🗺️ ⚖️ 🌿</div>
+  </div>
+</div>
+
+<!-- ===== MAIN APP SCREEN ===== -->
+<div id="appScreen" class="screen">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-brand" onclick="goHome()">
+      <span class="nav-brand-icon">📚</span>
+      <div>
+        <div class="nav-brand-text">SST Class 7</div>
+        <div class="nav-brand-sub">JKBOSE</div>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-btn" onclick="toggleTheme()" id="themeBtn">🌙 Dark</button>
+      <button class="nav-btn" onclick="resetProgress()">🔄</button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    
+    <!-- HOME TAB -->
+    <div class="tab-panel active" id="tab-home">
+      <div class="hero-section">
+        <div class="hero-title">Welcome Back! 👋</div>
+        <div class="hero-sub">Continue your Social Science journey</div>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <div class="stat-num" id="statsChapters">0</div>
+            <div class="stat-label">Chapters Done</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num" id="statsQuiz">0%</div>
+            <div class="stat-label">Quiz Score</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num" id="statsCards">0</div>
+            <div class="stat-label">Cards Studied</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">⚡ Quick Access</div>
+      <div class="quick-grid">
+        <div class="quick-card" onclick="switchTab('chapters')">
+          <div class="quick-icon">📖</div>
+          <div class="quick-label">Chapters</div>
+        </div>
+        <div class="quick-card" onclick="switchTab('flashcards')">
+          <div class="quick-icon">🃏</div>
+          <div class="quick-label">Flashcards</div>
+        </div>
+        <div class="quick-card" onclick="switchTab('quiz')">
+          <div class="quick-icon">❓</div>
+          <div class="quick-label">Quiz Mode</div>
+        </div>
+        <div class="quick-card" onclick="switchTab('maplab')">
+          <div class="quick-icon">🗺️</div>
+          <div class="quick-label">Map Lab</div>
+        </div>
+        <div class="quick-card" onclick="switchTab('progress')">
+          <div class="quick-icon">📊</div>
+          <div class="quick-label">Progress</div>
+        </div>
+        <div class="quick-card" onclick="switchTab('notes')">
+          <div class="quick-icon">📝</div>
+          <div class="quick-label">Notes</div>
+        </div>
+        <div class="quick-card" onclick="switchTab('random')">
+          <div class="quick-icon">🎲</div>
+          <div class="quick-label">Random Q</div>
+        </div>
+        <div class="quick-card" onclick="switchTab('timeline')">
+          <div class="quick-icon">⏳</div>
+          <div class="quick-label">Timeline</div>
+        </div>
+      </div>
+
+      <div class="section-title">🏺 History Chapters</div>
+      <div class="chapters-grid" id="historyChapters"></div>
+
+      <div class="section-title">🌍 Geography Chapters</div>
+      <div class="chapters-grid" id="geoChapters"></div>
+
+      <div class="section-title">🏛 Civics Chapters</div>
+      <div class="chapters-grid" id="civicsChapters"></div>
+    </div>
+
+    <!-- CHAPTERS TAB -->
+    <div class="tab-panel" id="tab-chapters">
+      <div class="section-title">📚 Chapter Library</div>
+      <div class="chapters-grid" id="allChapters"></div>
+    </div>
+
+    <!-- FLASHCARDS TAB -->
+    <div class="tab-panel" id="tab-flashcards">
+      <div class="section-title">🃏 All Flashcards</div>
+      <div style="margin-bottom:16px">
+        <label style="font-size:13px;color:var(--text-muted)">Filter by Subject:</label>
+        <select id="fcFilter" onchange="renderGlobalFlashcards()" style="margin-left:10px;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:6px 12px;border-radius:8px;font-family:var(--font-body)">
+          <option value="all">All Subjects</option>
+          <option value="history">History</option>
+          <option value="geography">Geography</option>
+          <option value="civics">Civics</option>
+        </select>
+      </div>
+      <div id="globalFlashcards"></div>
+    </div>
+
+    <!-- QUIZ TAB -->
+    <div class="tab-panel" id="tab-quiz">
+      <div class="section-title">❓ Quiz Mode</div>
+      <div style="margin-bottom:16px">
+        <label style="font-size:13px;color:var(--text-muted)">Select Chapter:</label>
+        <select id="quizChapterSel" onchange="initQuizMode()" style="margin-left:10px;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:6px 12px;border-radius:8px;font-family:var(--font-body)">
+          <option value="all">All Chapters</option>
+        </select>
+      </div>
+      <div id="quizModeContainer"></div>
+    </div>
+
+    <!-- MAP LAB TAB -->
+    <div class="tab-panel" id="tab-maplab">
+      <div class="section-title">🗺️ Map Lab</div>
+      
+      <div class="simulation-box">
+        <div class="sim-header"><span>🌏</span><h3>India – Physical & Political Map</h3></div>
+        <div class="sim-body">
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">Click on regions to explore geographical features of India</p>
+          <div class="map-container">
+            <svg viewBox="0 0 300 380" style="width:100%;max-width:340px;margin:0 auto;display:block" onclick="mapClick(event)">
+              <!-- Simplified India shape -->
+              <polygon points="140,20 180,30 220,60 240,100 235,140 220,170 200,200 210,240 195,280 175,320 155,360 130,340 110,300 95,265 105,230 90,195 70,165 55,135 70,100 80,70 110,40" fill="#27ae60" opacity="0.7" stroke="#1abc9c" stroke-width="2"/>
+              <!-- J&K region -->
+              <polygon points="130,20 160,15 190,25 200,50 180,60 155,55 135,45" fill="#e74c3c" opacity="0.8" stroke="white" stroke-width="1"/>
+              <!-- Rivers -->
+              <path d="M160,70 Q170,120 165,180 Q160,230 155,310" stroke="#3498db" stroke-width="2" fill="none" opacity="0.7"/>
+              <path d="M120,90 Q130,130 140,180" stroke="#3498db" stroke-width="1.5" fill="none" opacity="0.5"/>
+              <!-- Labels -->
+              <text x="155" y="38" fill="white" font-size="8" text-anchor="middle" font-weight="bold">J&amp;K</text>
+              <text x="160" y="140" fill="white" font-size="9" text-anchor="middle">INDIA</text>
+              <text x="163" y="165" fill="#3498db" font-size="7" text-anchor="middle">Ganga</text>
+              <!-- Mountain symbols -->
+              <text x="130" y="55" fill="white" font-size="10">🏔️</text>
+              <text x="195" y="270" fill="white" font-size="10">🌊</text>
+              <!-- Cities -->
+              <circle cx="152" cy="135" r="4" fill="#f39c12" class="map-pin"/>
+              <text x="158" y="133" fill="#f39c12" font-size="7">Delhi</text>
+              <circle cx="165" cy="220" r="3" fill="#f39c12" class="map-pin"/>
+              <text x="171" y="218" fill="#f39c12" font-size="7">Mumbai</text>
+              <circle cx="175" cy="285" r="3" fill="#f39c12" class="map-pin"/>
+              <text x="181" y="283" fill="#f39c12" font-size="7">Chennai</text>
+            </svg>
+            <div id="mapInfo" style="text-align:center;margin-top:12px;font-size:13px;color:var(--text-muted);min-height:40px">
+              👆 Click on the map to explore regions
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="simulation-box">
+        <div class="sim-header"><span>🌱</span><h3>Natural Resources Distribution</h3></div>
+        <div class="sim-body">
+          <div class="resource-bars" id="resourceBars"></div>
+        </div>
+      </div>
+
+      <div class="simulation-box">
+        <div class="sim-header"><span>🌡️</span><h3>Climate Zones of India</h3></div>
+        <div class="sim-body">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+            <div style="background:linear-gradient(135deg,#e74c3c33,#c0392b33);border:1px solid #e74c3c44;border-radius:10px;padding:14px;text-align:center;cursor:pointer" onclick="showClimate('tropical')">
+              <div style="font-size:24px">☀️</div>
+              <div style="font-size:12px;font-weight:600;margin-top:6px">Tropical</div>
+              <div style="font-size:11px;color:var(--text-muted)">South India</div>
+            </div>
+            <div style="background:linear-gradient(135deg,#27ae6033,#1e8b4633);border:1px solid #27ae6044;border-radius:10px;padding:14px;text-align:center;cursor:pointer" onclick="showClimate('monsoon')">
+              <div style="font-size:24px">🌧️</div>
+              <div style="font-size:12px;font-weight:600;margin-top:6px">Monsoon</div>
+              <div style="font-size:11px;color:var(--text-muted)">Central India</div>
+            </div>
+            <div style="background:linear-gradient(135deg,#3498db33,#2980b933);border:1px solid #3498db44;border-radius:10px;padding:14px;text-align:center;cursor:pointer" onclick="showClimate('alpine')">
+              <div style="font-size:24px">❄️</div>
+              <div style="font-size:12px;font-weight:600;margin-top:6px">Alpine</div>
+              <div style="font-size:11px;color:var(--text-muted)">Himalayan</div>
+            </div>
+          </div>
+          <div id="climateInfo" style="margin-top:16px;padding:14px;background:var(--surface2);border-radius:10px;font-size:13px;display:none"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIMELINE TAB -->
+    <div class="tab-panel" id="tab-timeline">
+      <div class="section-title">⏳ History Timeline Explorer</div>
+      <div class="diagram-box">
+        <div class="diagram-title">Medieval India – Key Events Timeline</div>
+        <div class="timeline" id="mainTimeline"></div>
+      </div>
+    </div>
+
+    <!-- PROGRESS TAB -->
+    <div class="tab-panel" id="tab-progress">
+      <div class="section-title">📊 Progress Dashboard</div>
+      
+      <div class="progress-overview">
+        <div class="progress-stat-card">
+          <div class="progress-stat-val" id="pdChapters">0/10</div>
+          <div class="progress-stat-label">Chapters</div>
+        </div>
+        <div class="progress-stat-card">
+          <div class="progress-stat-val" id="pdQuizzes">0</div>
+          <div class="progress-stat-label">Quizzes Done</div>
+        </div>
+        <div class="progress-stat-card">
+          <div class="progress-stat-val" id="pdFlash">0</div>
+          <div class="progress-stat-label">Cards Studied</div>
+        </div>
+        <div class="progress-stat-card">
+          <div class="progress-stat-val" id="pdNotes">0</div>
+          <div class="progress-stat-label">Notes Saved</div>
+        </div>
+      </div>
+
+      <div class="section-title">🏆 Achievements</div>
+      <div class="badges-grid" id="badgesGrid"></div>
+
+      <div class="section-title">📖 Chapter Progress</div>
+      <div id="progressChapters"></div>
+    </div>
+
+    <!-- NOTES TAB -->
+    <div class="tab-panel" id="tab-notes">
+      <div class="section-title">📝 My Notes</div>
+      <div class="notes-toolbar">
+        <select id="notesChapter" style="flex:1;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:8px;font-family:var(--font-body)">
+          <option value="">Select Chapter...</option>
+        </select>
+        <button class="btn-primary" onclick="saveNote()" style="white-space:nowrap">💾 Save</button>
+      </div>
+      <textarea class="notes-area" id="notesArea" placeholder="Write your notes here..."></textarea>
+      <div class="saved-notes">
+        <div class="section-title" style="margin-top:20px">💾 Saved Notes</div>
+        <div id="savedNotesList"></div>
+      </div>
+    </div>
+
+    <!-- RANDOM Q TAB -->
+    <div class="tab-panel" id="tab-random">
+      <div class="section-title">🎲 Random Question Generator</div>
+      <div class="random-q-card" id="randomQCard">
+        <div class="random-q-label">Question</div>
+        <div class="random-q-text" id="randomQText">Click the button to get a random question!</div>
+        <div class="random-q-source" id="randomQSource"></div>
+      </div>
+      <div style="text-align:center;margin-bottom:20px">
+        <button class="btn-primary" onclick="generateRandom()" style="margin-right:10px">🎲 New Question</button>
+        <button class="btn-secondary" onclick="showRandomAnswer()">💡 Show Answer</button>
+      </div>
+      <div id="randomAnswerBox" style="display:none;background:var(--surface);border:1px solid var(--green);border-radius:var(--radius);padding:20px;color:var(--green)"></div>
+    </div>
+
+  </div><!-- end main-content -->
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <button class="bottom-nav-item active" onclick="switchTab('home')" id="nav-home">
+      <span class="bottom-nav-icon">🏠</span>
+      <span class="bottom-nav-label">Home</span>
+    </button>
+    <button class="bottom-nav-item" onclick="switchTab('chapters')" id="nav-chapters">
+      <span class="bottom-nav-icon">📚</span>
+      <span class="bottom-nav-label">Chapters</span>
+    </button>
+    <button class="bottom-nav-item" onclick="switchTab('quiz')" id="nav-quiz">
+      <span class="bottom-nav-icon">❓</span>
+      <span class="bottom-nav-label">Quiz</span>
+    </button>
+    <button class="bottom-nav-item" onclick="switchTab('progress')" id="nav-progress">
+      <span class="bottom-nav-icon">📊</span>
+      <span class="bottom-nav-label">Progress</span>
+    </button>
+    <button class="bottom-nav-item" onclick="switchTab('notes')" id="nav-notes">
+      <span class="bottom-nav-icon">📝</span>
+      <span class="bottom-nav-label">Notes</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ===== CHAPTER DETAIL SCREEN ===== -->
+<div id="chapterScreen" class="screen">
+  <div class="chapter-header">
+    <button class="back-btn" onclick="closeChapter()">←</button>
+    <div class="chapter-header-info">
+      <div class="chapter-header-num" id="chHeaderNum"></div>
+      <div class="chapter-header-title" id="chHeaderTitle"></div>
+    </div>
+    <button class="nav-btn" onclick="bookmarkChapter()" id="bookmarkBtn" style="border:none;background:transparent;font-size:20px;cursor:pointer">🔖</button>
+  </div>
+
+  <div class="section-tabs" id="chapterTabs">
+    <button class="section-tab active" onclick="showSection('concept')">🧠 Concept</button>
+    <button class="section-tab" onclick="showSection('diagram')">🖼 Diagram</button>
+    <button class="section-tab" onclick="showSection('simulation')">🎮 Simulation</button>
+    <button class="section-tab" onclick="showSection('flashcards')">🃏 Flashcards</button>
+    <button class="section-tab" onclick="showSection('quiz')">❓ Quiz</button>
+    <button class="section-tab" onclick="showSection('competency')">🧪 Competency</button>
+    <button class="section-tab" onclick="showSection('reflection')">💭 Reflection</button>
+    <button class="section-tab" onclick="showSection('casestudy')">📊 Case Study</button>
+  </div>
+
+  <div class="chapter-content">
+    <div class="content-section active" id="sec-concept"></div>
+    <div class="content-section" id="sec-diagram"></div>
+    <div class="content-section" id="sec-simulation"></div>
+    <div class="content-section" id="sec-flashcards"></div>
+    <div class="content-section" id="sec-quiz"></div>
+    <div class="content-section" id="sec-competency"></div>
+    <div class="content-section" id="sec-reflection"></div>
+    <div class="content-section" id="sec-casestudy"></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- PWA Install Banner -->
+<div class="install-banner" id="installBanner">
+  <span style="font-size:24px">📱</span>
+  <div class="install-banner-text">
+    <strong>Install App</strong><br>
+    <span style="font-size:11px;color:var(--text-muted)">Add to home screen for offline use</span>
+  </div>
+  <button class="install-banner-btn" id="installBtn">Install</button>
+  <button class="install-close" onclick="document.getElementById('installBanner').classList.remove('show')">✕</button>
+</div>
+
+<script>
+// ===== DATA: CHAPTERS =====
+const CHAPTERS = [
+  {
+    id: 1, num: 'Chapter 1', subject: 'history',
+    title: 'Medieval India – Introduction',
+    icon: '🏺',
+    concept: `
+      <div class="concept-box">
+        <h3>🧠 What is Medieval India?</h3>
+        <p>Medieval India refers to the period from approximately <span class="key-term">8th century CE to 18th century CE</span>. This era followed the ancient period and preceded the modern period of Indian history.</p>
+        <p>Key characteristics of Medieval India include:</p>
+        <ul>
+          <li>Rise and fall of powerful kingdoms and empires</li>
+          <li>Spread of Islam and synthesis of Hindu-Muslim cultures</li>
+          <li>Development of Bhakti and Sufi movements</li>
+          <li>Remarkable achievements in art, architecture, and literature</li>
+          <li>Growth of trade networks connecting India to the world</li>
+        </ul>
+      </div>
+      <div class="concept-box">
+        <h3>📅 Sources of Medieval History</h3>
+        <p>Historians study this period using:</p>
+        <ul>
+          <li><span class="key-term">Chronicles</span> – Written accounts like Ain-i-Akbari, Baburnama</li>
+          <li><span class="key-term">Inscriptions</span> – Stone and copper plate records</li>
+          <li><span class="key-term">Coins</span> – Currency revealing rulers and trade</li>
+          <li><span class="key-term">Monuments</span> – Forts, mosques, temples, palaces</li>
+          <li><span class="key-term">Foreign Accounts</span> – Accounts by travelers like Ibn Battuta, Marco Polo</li>
+        </ul>
+      </div>
+      <div class="concept-box">
+        <h3>🗺️ Important Kingdoms of Medieval India</h3>
+        <p>The medieval period saw many powerful kingdoms including the <span class="key-term">Cholas</span> in the south, <span class="key-term">Rajput kingdoms</span> in the northwest, the <span class="key-term">Delhi Sultanate</span>, and the <span class="key-term">Mughal Empire</span>. Each left lasting impacts on India's culture.</p>
+      </div>
+    `,
+    flashcards: [
+      { q: 'What period does Medieval India cover?', a: 'Approximately 8th to 18th century CE' },
+      { q: 'Name one primary source of medieval history', a: 'Chronicles, inscriptions, coins, monuments, or foreign accounts' },
+      { q: 'What are Bhakti and Sufi movements?', a: 'Spiritual movements that preached devotion to God and unity between communities' },
+      { q: 'Who wrote Ain-i-Akbari?', a: 'Abul Fazl – the court historian of Emperor Akbar' },
+      { q: 'Name a famous foreign traveler who visited medieval India', a: 'Ibn Battuta (from Morocco) or Marco Polo (from Italy)' }
+    ],
+    quiz: [
+      { q: 'Medieval India begins approximately from which century?', opts: ['3rd century CE', '8th century CE', '15th century CE', '1st century BCE'], ans: 1, exp: 'Medieval India is generally considered to begin around the 8th century CE.' },
+      { q: 'Ain-i-Akbari is a type of:', opts: ['Inscription', 'Coin', 'Chronicle', 'Temple'], ans: 2, exp: 'Ain-i-Akbari is a detailed chronicle/record written by Abul Fazl during Akbar\'s reign.' },
+      { q: 'Which movement preached unity between Hindus and Muslims?', opts: ['Brahmo Samaj', 'Bhakti Movement', 'Arya Samaj', 'None of these'], ans: 1, exp: 'The Bhakti movement emphasized devotion to God and often promoted unity between communities.' },
+      { q: 'Ibn Battuta was a traveler from:', opts: ['China', 'Persia', 'Morocco', 'Italy'], ans: 2, exp: 'Ibn Battuta was a famous Moroccan traveler who visited India during the Delhi Sultanate period.' },
+      { q: 'Coins are a historical source because they:', opts: ['Are beautiful', 'Reveal information about rulers and economy', 'Are made of gold', 'Were used for prayers'], ans: 1, exp: 'Coins contain names of rulers, dates, and symbols that tell us about history and trade.' }
+    ],
+    competency: [
+      { q: 'A historian finds a copper plate with inscriptions. How would they use it as a historical source? What challenges might they face in interpreting it?', a: 'The historian would analyze the language, symbols, and content of the inscription to understand the time period, ruler, and events it describes. Challenges include: damaged or missing portions, archaic script, different interpretations of symbols, and language barriers.' },
+      { q: 'Why is it important to use MULTIPLE sources (coins, chronicles, monuments) rather than relying on just one source of information about medieval India?', a: 'Multiple sources help cross-verify information, fill gaps, and provide different perspectives. A single source may be biased or incomplete. For example, a king\'s chronicle may glorify the ruler while foreign travelers may give a more neutral account.' }
+    ],
+    reflection: [
+      { q: 'If you could travel back to medieval India, which aspect of life would you most want to experience and why?' },
+      { q: 'How do you think the Bhakti and Sufi movements changed the way people thought about religion in India?' }
+    ],
+    caseStudy: {
+      title: 'Case Study: The Importance of Historical Sources',
+      content: 'Imagine two historians studying the same medieval king. Historian A uses only the king\'s official court records, while Historian B uses court records, inscriptions, coins, monuments, AND accounts of ordinary people. Their conclusions about the king\'s rule turn out to be very different.',
+      activities: [
+        'List 3 reasons why Historian B\'s study would be more reliable.',
+        'Identify one bias that might exist in official court records.',
+        'Suggest one type of source that might tell us about ordinary people\'s lives in medieval India.'
+      ]
+    },
+    diagram: 'timeline',
+    simulation: 'empire',
+    timelineData: [
+      { year: '750 CE', event: 'Rise of Palas in Bengal' },
+      { year: '850 CE', event: 'Chola Empire rises in South India' },
+      { year: '1000 CE', event: 'Mahmud of Ghazni raids India' },
+      { year: '1192 CE', event: 'Second Battle of Tarain – Muslim rule begins' },
+      { year: '1206 CE', event: 'Delhi Sultanate established' },
+      { year: '1526 CE', event: 'Mughal Empire founded by Babur' }
+    ]
+  },
+  {
+    id: 2, num: 'Chapter 2', subject: 'history',
+    title: 'Delhi Sultanate',
+    icon: '🕌',
+    concept: `
+      <div class="concept-box">
+        <h3>🧠 The Delhi Sultanate (1206–1526 CE)</h3>
+        <p>The Delhi Sultanate was a series of Muslim dynasties that ruled over northern India. It began with <span class="key-term">Qutb-ud-din Aibak</span> in 1206 CE and lasted until the Mughal conquest in 1526 CE.</p>
+        <p><strong>Five Dynasties of the Delhi Sultanate:</strong></p>
+        <ul>
+          <li><span class="key-term">Slave Dynasty (1206-1290)</span> – Founded by Aibak; Iltutmish consolidated power</li>
+          <li><span class="key-term">Khalji Dynasty (1290-1320)</span> – Alauddin Khalji was the most powerful ruler</li>
+          <li><span class="key-term">Tughlaq Dynasty (1320-1414)</span> – Muhammad bin Tughlaq's controversial policies</li>
+          <li><span class="key-term">Sayyid Dynasty (1414-1451)</span> – A period of decline</li>
+          <li><span class="key-term">Lodi Dynasty (1451-1526)</span> – Last sultanate, ended by Babur at Panipat</li>
+        </ul>
+      </div>
+      <div class="concept-box">
+        <h3>👑 Important Rulers</h3>
+        <p><strong>Iltutmish</strong> – Organized the administration; introduced the silver coin called <span class="key-term">Tanka</span></p>
+        <p><strong>Razia Sultan</strong> – First and only woman to rule the Delhi Sultanate (1236-1240)</p>
+        <p><strong>Alauddin Khalji</strong> – Famous for market control reforms and repelling Mongol invasions</p>
+        <p><strong>Firoz Shah Tughlaq</strong> – Known for welfare works including canals and hospitals</p>
+      </div>
+      <div class="concept-box">
+        <h3>🏛 Administration</h3>
+        <p>The Sultan was the supreme authority. The empire was divided into provinces called <span class="key-term">iqtas</span>, governed by officials called <span class="key-term">iqtadars</span> or muqtis. The <span class="key-term">wazir</span> was the chief minister.</p>
+      </div>
+    `,
+    flashcards: [
+      { q: 'When was the Delhi Sultanate established?', a: '1206 CE by Qutb-ud-din Aibak' },
+      { q: 'Who was Razia Sultan?', a: 'The first and only woman ruler of the Delhi Sultanate (1236-1240)' },
+      { q: 'What was a "Tanka"?', a: 'A silver coin introduced during the Delhi Sultanate period' },
+      { q: 'Name the five dynasties of the Delhi Sultanate', a: 'Slave, Khalji, Tughlaq, Sayyid, and Lodi dynasties' },
+      { q: 'What was an "iqta"?', a: 'A province of the Delhi Sultanate, governed by an iqtadar' }
+    ],
+    quiz: [
+      { q: 'Who founded the Delhi Sultanate?', opts: ['Akbar', 'Qutb-ud-din Aibak', 'Babur', 'Aurangzeb'], ans: 1, exp: 'Qutb-ud-din Aibak founded the Delhi Sultanate in 1206 CE after Muhammad Ghori\'s death.' },
+      { q: 'Razia Sultan was the ruler of:', opts: ['Mughal Empire', 'Vijayanagara Empire', 'Delhi Sultanate', 'Chola Empire'], ans: 2, exp: 'Razia Sultan was the ruler of the Delhi Sultanate from 1236 to 1240 CE.' },
+      { q: 'The silver coin of the Sultanate was called:', opts: ['Rupee', 'Tanka', 'Paisa', 'Dinar'], ans: 1, exp: 'The silver coin introduced during the Delhi Sultanate was called the Tanka.' },
+      { q: 'Which dynasty built the famous Qutb Minar?', opts: ['Khalji', 'Lodi', 'Slave/Mamluk', 'Tughlaq'], ans: 2, exp: 'The Qutb Minar was begun by Qutb-ud-din Aibak of the Slave Dynasty and completed by Iltutmish.' },
+      { q: 'The last ruler of the Delhi Sultanate was:', opts: ['Alauddin Khalji', 'Ibrahim Lodi', 'Firoz Shah Tughlaq', 'Muhammad bin Tughlaq'], ans: 1, exp: 'Ibrahim Lodi was the last ruler of the Delhi Sultanate, defeated by Babur at the First Battle of Panipat (1526).' }
+    ],
+    competency: [
+      { q: 'Alauddin Khalji introduced strict market control policies. As a merchant in 1300 CE Delhi, write a short account of how these policies affected your business.', a: 'As a merchant, Alauddin\'s market reforms meant fixed prices for goods, strict weight and measure controls, and government spies monitoring transactions. While this made goods affordable for common people, merchants could not earn extra profits. Violations meant severe punishment.' },
+      { q: 'Compare the administration of the Delhi Sultanate with the government system in J&K today. What are two similarities and two differences?', a: 'Similarities: Both have a central authority, both divide territory for administration. Differences: Today\'s system is democratic (elected representatives), while the Sultanate was hereditary monarchy; today there are courts and rights, while the Sultan\'s word was law.' }
+    ],
+    reflection: [
+      { q: 'Razia Sultan broke barriers as a woman ruler in medieval India. What challenges do you think she faced, and what does her story teach us today?' },
+      { q: 'Muhammad bin Tughlaq shifted the capital from Delhi to Daulatabad. Was this a good decision? Think of both the advantages and disadvantages.' }
+    ],
+    caseStudy: {
+      title: 'Case Study: Alauddin Khalji\'s Market Reforms',
+      content: 'Alauddin Khalji (1296-1316) was one of the most powerful Delhi Sultans. To maintain a large army cheaply, he introduced radical market control systems. He fixed the prices of all goods from grains to cattle. Government officials checked prices and quality regularly. Any shopkeeper who cheated faced harsh punishment.',
+      activities: [
+        'Was Alauddin\'s price control system beneficial for (a) soldiers, (b) merchants, (c) ordinary citizens? Explain for each.',
+        'Do you think government price controls are a good idea? Give reasons for and against.',
+        'How did Alauddin\'s reforms help him maintain military power?'
+      ]
+    },
+    diagram: 'dynasty',
+    simulation: 'empire',
+    timelineData: [
+      { year: '1206', event: 'Slave Dynasty – Qutb-ud-din Aibak' },
+      { year: '1236', event: 'Razia Sultan becomes ruler' },
+      { year: '1290', event: 'Khalji Dynasty begins' },
+      { year: '1296', event: 'Alauddin Khalji – Market reforms' },
+      { year: '1320', event: 'Tughlaq Dynasty begins' },
+      { year: '1526', event: 'Delhi Sultanate ends – Mughal era begins' }
+    ]
+  },
+  {
+    id: 3, num: 'Chapter 3', subject: 'history',
+    title: 'Mughal Empire',
+    icon: '👑',
+    concept: `
+      <div class="concept-box">
+        <h3>🧠 The Mughal Empire (1526–1857 CE)</h3>
+        <p>The Mughal Empire was one of the greatest empires in Indian history, founded by <span class="key-term">Babur</span> after his victory at the First Battle of Panipat in 1526 CE.</p>
+        <p><strong>The Six Great Mughals:</strong></p>
+        <ul>
+          <li><span class="key-term">Babur</span> (1526-1530) – Founder; wrote the Baburnama</li>
+          <li><span class="key-term">Humayun</span> (1530-1556) – Lost and regained the empire</li>
+          <li><span class="key-term">Akbar</span> (1556-1605) – Greatest Mughal; policy of religious tolerance (Sulh-i-kul)</li>
+          <li><span class="key-term">Jahangir</span> (1605-1627) – Patron of arts and painting</li>
+          <li><span class="key-term">Shah Jahan</span> (1628-1658) – Built the Taj Mahal; "Golden age of Mughal architecture"</li>
+          <li><span class="key-term">Aurangzeb</span> (1658-1707) – Extended empire to its greatest size but faced revolts</li>
+        </ul>
+      </div>
+      <div class="concept-box">
+        <h3>⚖️ Akbar's Administration</h3>
+        <p>Akbar is considered the greatest Mughal emperor. His key policies included:</p>
+        <ul>
+          <li><span class="key-term">Mansabdari System</span> – Military and civilian ranking system</li>
+          <li><span class="key-term">Sulh-i-kul</span> – Universal peace and religious tolerance</li>
+          <li><span class="key-term">Din-i-Ilahi</span> – New spiritual movement combining elements of different religions</li>
+          <li>Abolished <span class="key-term">Jizya</span> (tax on non-Muslims)</li>
+          <li>Navratnas – Nine gems (talented scholars) in his court</li>
+        </ul>
+      </div>
+      <div class="concept-box">
+        <h3>💰 Mughal Economy</h3>
+        <p>The Mughal Empire had a thriving economy based on agriculture, textile trade (muslin, silk), and international commerce. The <span class="key-term">Zabt system</span> organized land revenue collection. India was known as the "golden bird" due to its wealth.</p>
+      </div>
+    `,
+    flashcards: [
+      { q: 'Who founded the Mughal Empire?', a: 'Babur, after the First Battle of Panipat in 1526 CE' },
+      { q: 'What is Sulh-i-kul?', a: 'Akbar\'s policy of universal peace and tolerance towards all religions' },
+      { q: 'What famous structure did Shah Jahan build?', a: 'The Taj Mahal – a mausoleum for his wife Mumtaz Mahal' },
+      { q: 'What was the Mansabdari system?', a: 'A military and civil administration ranking system introduced by Akbar' },
+      { q: 'Who were the Navratnas?', a: 'The "nine gems" – talented scholars, poets, and musicians in Akbar\'s court' }
+    ],
+    quiz: [
+      { q: 'The First Battle of Panipat was fought in:', opts: ['1206 CE', '1526 CE', '1605 CE', '1857 CE'], ans: 1, exp: 'The First Battle of Panipat in 1526 CE established Mughal rule when Babur defeated Ibrahim Lodi.' },
+      { q: 'Which Mughal emperor is known for the policy of Sulh-i-kul?', opts: ['Babur', 'Aurangzeb', 'Akbar', 'Shah Jahan'], ans: 2, exp: 'Akbar introduced Sulh-i-kul meaning universal peace, promoting tolerance among all religions.' },
+      { q: 'The Taj Mahal was built by:', opts: ['Akbar', 'Babur', 'Humayun', 'Shah Jahan'], ans: 3, exp: 'Shah Jahan built the Taj Mahal as a mausoleum for his beloved wife Mumtaz Mahal.' },
+      { q: 'Who wrote the Baburnama?', opts: ['Akbar', 'Babur himself', 'Abul Fazl', 'Birbal'], ans: 1, exp: 'Babur wrote his own memoirs called Baburnama, which is an important historical source.' },
+      { q: 'Jizya was a tax levied on:', opts: ['Muslims', 'Non-Muslims', 'Merchants', 'Farmers'], ans: 1, exp: 'Jizya was a tax on non-Muslims. Akbar abolished it, which was abolished again by Aurangzeb (who brought it back).' }
+    ],
+    competency: [
+      { q: 'Akbar was a Muslim emperor who promoted religious tolerance. How did his policies differ from Aurangzeb\'s approach? Which approach do you think was better for India as a diverse nation? Give reasons.', a: 'Akbar promoted Sulh-i-kul (universal peace), abolished jizya, included Hindus in high positions, and participated in Hindu festivals. Aurangzeb reintroduced jizya, demolished some temples, and had stricter Islamic policies. For a diverse nation like India, Akbar\'s approach was likely better as it created unity and loyalty across communities.' },
+      { q: 'The Mughal Empire was called "the golden bird." What economic factors made it so wealthy? Can you find any parallels with modern Indian economy?', a: 'The Mughal economy thrived due to: fertile agricultural lands, textile exports (muslin, silk), strategic location for trade, efficient revenue collection (zabt system), and skilled craftsmen. Modern parallels: India\'s IT and textile exports, agricultural economy, and strategic global trade position.' }
+    ],
+    reflection: [
+      { q: 'Why do you think the Mughal Empire declined after Aurangzeb? Can the decline of a great empire teach us lessons for today\'s world?' },
+      { q: 'Akbar never went to school but became a great ruler. What qualities do you think made him successful?' }
+    ],
+    caseStudy: {
+      title: 'Case Study: Akbar and Religious Harmony',
+      content: 'Akbar (1556-1605) ruled an empire with millions of Hindus, Muslims, Sikhs, Christians, and people of other faiths. Instead of forcing everyone to follow one religion, he adopted a policy of Sulh-i-kul. He discussed religion with scholars from all faiths in his Ibadat Khana (House of Worship). He married Rajput princess Jodha Bai without requiring her to convert. He removed jizya (tax on non-Muslims) and allowed temples to be built.',
+      activities: [
+        'List 3 ways Akbar promoted religious harmony in his empire.',
+        'Why might some Muslim nobles have opposed Akbar\'s religious policies?',
+        'How can the lesson of Sulh-i-kul apply to modern India or the world?'
+      ]
+    },
+    diagram: 'mindmap',
+    simulation: 'empire',
+    timelineData: [
+      { year: '1526', event: 'Babur wins First Battle of Panipat' },
+      { year: '1530', event: 'Humayun inherits empire' },
+      { year: '1556', event: 'Akbar begins his great reign' },
+      { year: '1600', event: 'Mughal Empire at peak under Akbar' },
+      { year: '1628', event: 'Shah Jahan becomes Emperor' },
+      { year: '1632', event: 'Construction of Taj Mahal begins' },
+      { year: '1658', event: 'Aurangzeb becomes Emperor' },
+      { year: '1707', event: 'Aurangzeb dies – Decline begins' }
+    ]
+  },
+  {
+    id: 4, num: 'Chapter 4', subject: 'history',
+    title: 'Culture and Architecture in Medieval India',
+    icon: '🎨',
+    concept: `
+      <div class="concept-box">
+        <h3>🧠 Cultural Synthesis in Medieval India</h3>
+        <p>Medieval India witnessed a remarkable blending of Hindu and Islamic cultures, creating a unique <span class="key-term">Indo-Islamic culture</span>. This synthesis appeared in architecture, language, music, food, and clothing.</p>
+      </div>
+      <div class="concept-box">
+        <h3>🕌 Architecture</h3>
+        <p><strong>Indo-Islamic Architecture</strong> combined elements of both traditions:</p>
+        <ul>
+          <li><span class="key-term">Qutb Minar</span> – India's tallest ancient minaret, Delhi</li>
+          <li><span class="key-term">Humayun's Tomb</span> – First Mughal garden tomb, inspired Taj Mahal</li>
+          <li><span class="key-term">Fatehpur Sikri</span> – Akbar's planned capital city</li>
+          <li><span class="key-term">Taj Mahal</span> – Shah Jahan's monument to love, Agra</li>
+          <li><span class="key-term">Red Fort</span> – Mughal military and administrative center, Delhi</li>
+        </ul>
+        <p>Key architectural features: <span class="key-term">domes, minarets, arches, inlay work (pietra dura), char-bagh</span> (four-garden pattern)</p>
+      </div>
+      <div class="concept-box">
+        <h3>🎵 Literature and Music</h3>
+        <p>The Bhakti movement produced great poetry by saints like <span class="key-term">Kabir, Mirabai, Tukaram, and Guru Nanak</span>.</p>
+        <p><span class="key-term">Urdu language</span> emerged as a beautiful blend of Hindi, Persian, and Arabic.</p>
+        <p><span class="key-term">Hindustani classical music</span> developed through the fusion of Indian and Persian musical traditions. Amir Khusrau is credited with developing the <span class="key-term">tabla and sitar</span>.</p>
+      </div>
+    `,
+    flashcards: [
+      { q: 'What is "Indo-Islamic culture"?', a: 'A unique cultural blend that emerged from the synthesis of Hindu and Islamic traditions in medieval India' },
+      { q: 'Name the architectural style of the Taj Mahal', a: 'Indo-Islamic or Mughal architecture, featuring a white marble dome, minarets, and pietra dura inlay work' },
+      { q: 'What is pietra dura?', a: 'The art of inlaying precious and semi-precious stones into marble, used extensively in Mughal buildings' },
+      { q: 'Who is Amir Khusrau?', a: 'A famous poet-musician who contributed to Hindustani music and is credited with developing the sitar and tabla' },
+      { q: 'What is char-bagh?', a: 'A four-part garden design used in Mughal architecture, symbolizing paradise' }
+    ],
+    quiz: [
+      { q: 'The Taj Mahal is located in:', opts: ['Delhi', 'Agra', 'Fatehpur Sikri', 'Lahore'], ans: 1, exp: 'The Taj Mahal is located in Agra, Uttar Pradesh, built by Shah Jahan on the banks of the Yamuna River.' },
+      { q: 'Urdu language is a blend of:', opts: ['English and Hindi', 'Hindi, Persian and Arabic', 'Sanskrit and Tamil', 'Bengali and Persian'], ans: 1, exp: 'Urdu emerged from a blend of Hindi, Persian, Arabic, and other languages during the medieval period.' },
+      { q: 'Who built Fatehpur Sikri?', opts: ['Babur', 'Akbar', 'Shah Jahan', 'Aurangzeb'], ans: 1, exp: 'Akbar built Fatehpur Sikri as his new capital city, though it was later abandoned due to water scarcity.' },
+      { q: 'Kabir and Mirabai were famous saints of which movement?', opts: ['Sufi Movement', 'Bhakti Movement', 'Din-i-Ilahi', 'Arya Samaj'], ans: 1, exp: 'Kabir and Mirabai were poets and saints of the Bhakti movement that emphasized devotion to God.' },
+      { q: 'The famous minaret Qutb Minar is located in:', opts: ['Agra', 'Lahore', 'Delhi', 'Fatehpur Sikri'], ans: 2, exp: 'The Qutb Minar is located in Delhi and is one of the tallest minarets in the world.' }
+    ],
+    competency: [
+      { q: 'Look at the architecture of a building in your area. Can you identify any elements (domes, arches, decorations) that might have been influenced by Mughal or Islamic architecture? Describe what you see.', a: 'Students should observe local architecture and identify features like arched doorways, decorative elements, or domes that show Indo-Islamic influence. Even modern buildings may have elements inspired by this tradition.' },
+      { q: 'How did the Bhakti movement help create social harmony in medieval India? Give two specific examples from Bhakti poets.', a: 'The Bhakti movement broke caste barriers and promoted unity. For example, Kabir (a weaver) wrote poetry criticizing religious divisions and caste discrimination. Guru Nanak preached that all humans are equal before God, leading to the foundation of the Sikh religion.' }
+    ],
+    reflection: [
+      { q: 'The Taj Mahal took 22 years to build and employed 20,000 workers. What do you think working on this monument was like? Was it a good use of resources?' },
+      { q: 'When two cultures meet (like Hindu and Islamic in medieval India), the result can be beautiful. Can you think of examples of cultural fusion in today\'s world?' }
+    ],
+    caseStudy: {
+      title: 'Case Study: The Construction of Taj Mahal',
+      content: 'Shah Jahan began building the Taj Mahal in 1632 CE in memory of his wife Mumtaz Mahal who died in 1631. Over 20,000 workers were employed, including master craftsmen from Central Asia, Persia, and India. Pure white marble was brought from Rajasthan on thousands of elephants. 28 types of precious and semi-precious stones were used for the inlay work (pietra dura). The entire complex took 22 years to complete.',
+      activities: [
+        'Calculate: If the Taj Mahal was completed in 1653, in which year did work begin?',
+        'Why do you think Shah Jahan chose white marble for the monument?',
+        'How does the Taj Mahal reflect the blending of different cultural traditions?'
+      ]
+    },
+    diagram: 'mindmap',
+    simulation: 'monument',
+    timelineData: [
+      { year: '1193', event: 'Qutb Minar construction begins' },
+      { year: '1571', event: 'Fatehpur Sikri built by Akbar' },
+      { year: '1632', event: 'Taj Mahal construction begins' },
+      { year: '1648', event: 'Red Fort completed' },
+      { year: '1653', event: 'Taj Mahal completed' }
+    ]
+  },
+  // GEOGRAPHY
+  {
+    id: 5, num: 'Chapter 5', subject: 'geography',
+    title: 'Environment – Natural and Human',
+    icon: '🌿',
+    concept: `
+      <div class="concept-box">
+        <h3>🧠 What is Environment?</h3>
+        <p>The <span class="key-term">environment</span> is everything that surrounds us – air, water, land, plants, animals, and even other people. It includes both natural and human-made elements.</p>
+        <p><strong>Types of Environment:</strong></p>
+        <ul>
+          <li><span class="key-term">Natural Environment</span> – Created by nature: mountains, rivers, forests, oceans, atmosphere</li>
+          <li><span class="key-term">Human Environment</span> – Created by people: cities, roads, farms, factories, schools</li>
+        </ul>
+      </div>
+      <div class="concept-box">
+        <h3>🌍 Components of Natural Environment</h3>
+        <ul>
+          <li><span class="key-term">Lithosphere</span> – The solid rock crust of the Earth; provides land for living, minerals, and soil</li>
+          <li><span class="key-term">Atmosphere</span> – Layer of gases surrounding Earth; provides oxygen, protects from radiation</li>
+          <li><span class="key-term">Hydrosphere</span> – All water on Earth (oceans, rivers, lakes, ice); essential for life</li>
+          <li><span class="key-term">Biosphere</span> – Zone where all living things exist; includes all plants and animals</li>
+        </ul>
+      </div>
+      <div class="concept-box">
+        <h3>🔗 Interaction of Environment and Humans</h3>
+        <p>Humans depend on the environment for food, water, shelter, and resources. In turn, humans modify the environment by building cities, farming, and manufacturing. This relationship must be balanced to avoid <span class="key-term">environmental degradation</span>.</p>
+      </div>
+    `,
+    flashcards: [
+      { q: 'What is the lithosphere?', a: 'The solid rock crust of the Earth, providing land, minerals, and soil for living' },
+      { q: 'Name the four components of the natural environment', a: 'Lithosphere, Atmosphere, Hydrosphere, and Biosphere' },
+      { q: 'What is the biosphere?', a: 'The zone on Earth where all living organisms (plants, animals, humans) exist' },
+      { q: 'Difference between natural and human environment?', a: 'Natural environment is created by nature; human environment is created or modified by people' },
+      { q: 'What is environmental degradation?', a: 'The deterioration of the environment through depletion of resources, pollution, and destruction of ecosystems' }
+    ],
+    quiz: [
+      { q: 'The layer of gases surrounding the Earth is called:', opts: ['Lithosphere', 'Biosphere', 'Atmosphere', 'Hydrosphere'], ans: 2, exp: 'The atmosphere is the layer of gases surrounding Earth, providing oxygen and protecting us from harmful radiation.' },
+      { q: 'All water on Earth (oceans, rivers, ice) is part of the:', opts: ['Lithosphere', 'Hydrosphere', 'Atmosphere', 'Biosphere'], ans: 1, exp: 'The hydrosphere includes all water on Earth including oceans, rivers, lakes, glaciers, and groundwater.' },
+      { q: 'A city, road, and factory are examples of:', opts: ['Natural environment', 'Human environment', 'Biosphere', 'Lithosphere'], ans: 1, exp: 'Cities, roads, and factories are created by humans and are part of the human environment.' },
+      { q: 'The biosphere includes:', opts: ['Only plants', 'Only animals', 'All living organisms', 'Only humans'], ans: 2, exp: 'The biosphere includes all living organisms: plants, animals, microorganisms, and humans.' },
+      { q: 'Which component of the environment provides minerals and soil?', opts: ['Atmosphere', 'Hydrosphere', 'Lithosphere', 'Biosphere'], ans: 2, exp: 'The lithosphere (Earth\'s crust) provides minerals, rocks, and soil essential for life and human activities.' }
+    ],
+    competency: [
+      { q: 'Your school is planning to build a new building on green land. As an environment committee member, what environmental concerns would you raise? Suggest alternatives.', a: 'Environmental concerns: loss of green space, disruption of local ecosystems, reduced air quality. Alternatives: build on existing unused space, create rooftop gardens on new building, plant trees to compensate, use eco-friendly construction materials.' },
+      { q: 'Kashmir\'s environment includes mountains, rivers, forests, and the Dal Lake. Classify these as lithosphere, hydrosphere, atmosphere, or biosphere components.', a: 'Mountains = Lithosphere; Rivers and Dal Lake = Hydrosphere; Forests = Biosphere (living organisms); The air quality/climate = Atmosphere. Note: The Dal Lake supports biosphere elements like fish, plants, and birds too.' }
+    ],
+    reflection: [
+      { q: 'Think about your local environment in J&K. What natural features do you value most and why? How have humans changed this environment?' },
+      { q: 'If you had to live entirely without technology (no electricity, internet, machines), how would your relationship with the natural environment change?' }
+    ],
+    caseStudy: {
+      title: 'Case Study: The Dal Lake – A Threatened Ecosystem',
+      content: 'Dal Lake in Srinagar is one of the most famous lakes in the world. It supports thousands of families through fishing, tourism, and horticulture. However, the lake is under severe threat: its area has shrunk from 75 sq km in 1900 to about 10 sq km today due to encroachment, pollution from houseboats and sewage, and the growth of weeds and silt.',
+      activities: [
+        'Identify human activities that have degraded Dal Lake.',
+        'What would be the impact on local communities if Dal Lake disappears completely?',
+        'Suggest 3 measures to restore and protect Dal Lake.'
+      ]
+    },
+    diagram: 'mindmap',
+    simulation: 'environment',
+    timelineData: []
+  },
+  {
+    id: 6, num: 'Chapter 6', subject: 'geography',
+    title: 'Natural Resources',
+    icon: '⛏️',
+    concept: `
+      <div class="concept-box">
+        <h3>🧠 What are Natural Resources?</h3>
+        <p><span class="key-term">Natural resources</span> are materials and substances found in nature that are useful to humans. They include land, water, air, forests, minerals, and energy sources.</p>
+        <p><strong>Types of Natural Resources:</strong></p>
+        <ul>
+          <li><span class="key-term">Renewable Resources</span> – Can be replenished naturally; e.g., solar energy, wind, water, forests</li>
+          <li><span class="key-term">Non-Renewable Resources</span> – Cannot be replaced once used; e.g., coal, petroleum, natural gas, minerals</li>
+        </ul>
+      </div>
+      <div class="concept-box">
+        <h3>🌱 Types of Natural Resources</h3>
+        <ul>
+          <li><span class="key-term">Soil</span> – Essential for agriculture; formed over thousands of years</li>
+          <li><span class="key-term">Water</span> – Essential for all life; found in oceans, rivers, groundwater</li>
+          <li><span class="key-term">Air</span> – Mixture of gases essential for breathing; 78% nitrogen, 21% oxygen</li>
+          <li><span class="key-term">Forests</span> – Provide timber, medicine, oxygen; home to wildlife</li>
+          <li><span class="key-term">Minerals</span> – Iron, coal, gold, copper used in industry and construction</li>
+          <li><span class="key-term">Solar Energy</span> – Renewable, clean energy source from the sun</li>
+        </ul>
+      </div>
+      <div class="concept-box">
+        <h3>⚠️ Conservation of Natural Resources</h3>
+        <p>Natural resources must be used wisely. Conservation means using resources carefully to ensure they last for future generations. This is called <span class="key-term">sustainable development</span>.</p>
+        <p>The 3 Rs: <span class="key-term">Reduce, Reuse, Recycle</span></p>
+      </div>
+    `,
+    flashcards: [
+      { q: 'What is the difference between renewable and non-renewable resources?', a: 'Renewable resources can be replenished (solar, wind, water); non-renewable resources cannot be replaced once used (coal, oil, gas)' },
+      { q: 'Give two examples of non-renewable resources', a: 'Coal and petroleum (or natural gas, minerals)' },
+      { q: 'What is sustainable development?', a: 'Using natural resources in a way that meets current needs without compromising the ability of future generations to meet their needs' },
+      { q: 'What percentage of air is oxygen?', a: '21% of air is oxygen; 78% is nitrogen' },
+      { q: 'What are the 3 Rs of conservation?', a: 'Reduce, Reuse, and Recycle' }
+    ],
+    quiz: [
+      { q: 'Solar energy is a _____ resource:', opts: ['Non-renewable', 'Renewable', 'Mineral', 'Fossil fuel'], ans: 1, exp: 'Solar energy is renewable because the sun continuously provides energy and will not run out in human timescales.' },
+      { q: 'Coal is formed from:', opts: ['Dissolved minerals', 'Ancient marine animals', 'Ancient plants buried under pressure', 'Volcanic lava'], ans: 2, exp: 'Coal is a fossil fuel formed from ancient plants that died millions of years ago and were buried under layers of rock.' },
+      { q: 'The 3Rs of conservation stand for:', opts: ['Read, Write, Recite', 'Reduce, Reuse, Recycle', 'Rain, River, Rock', 'Renew, Restore, Replace'], ans: 1, exp: 'The 3Rs - Reduce, Reuse, Recycle - are the three main strategies for conserving natural resources and reducing waste.' },
+      { q: 'Which of these is a renewable resource?', opts: ['Coal', 'Natural Gas', 'Petroleum', 'Wind energy'], ans: 3, exp: 'Wind energy is renewable because wind is continuously available and using it does not deplete it.' },
+      { q: 'Soil is classified as a _____ resource:', opts: ['Renewable (quickly)', 'Non-renewable (takes thousands of years)', 'Unlimited resource', 'Mineral resource'], ans: 1, exp: 'Soil is technically renewable but takes thousands of years to form, so it must be carefully conserved.' }
+    ],
+    competency: [
+      { q: 'Your family uses petroleum for cooking (LPG gas). Design a plan to gradually shift to renewable energy sources. What challenges would you face in rural J&K?', a: 'Plan: Install solar panels for water heating and cooking, use biogas from agricultural waste. Challenges in rural J&K: high initial cost, limited sunlight in winter, lack of technical support, power grid irregularities. Government subsidies and community solar projects could help.' },
+      { q: 'Compare the natural resources of J&K with those of Rajasthan. What resources does each have more of, and how does this affect the economy and lifestyle of people?', a: 'J&K: Rich in water (rivers, glaciers), forests, minerals, hydropower potential. Rajasthan: Desert environment, rich in minerals (marble, sandstone), solar energy potential. J&K\'s economy relies on agriculture, tourism, handicrafts; Rajasthan on mining, tourism, solar farms.' }
+    ],
+    reflection: [
+      { q: 'Imagine India runs out of petroleum in 10 years. How would your daily life change? What alternatives would you use?' },
+      { q: 'Are humans the biggest threat to natural resources? Or are there natural processes that also deplete resources? Give examples.' }
+    ],
+    caseStudy: {
+      title: 'Case Study: Deforestation in Kashmir Valley',
+      content: 'Kashmir\'s forests are a critical natural resource, providing timber, habitat for wildlife, and protection against soil erosion and floods. However, rampant deforestation due to illegal logging, expansion of farmland, and construction has reduced forest cover significantly. The loss of forests has led to increased flooding, landslides, and loss of biodiversity.',
+      activities: [
+        'List three negative effects of deforestation on the environment and communities in Kashmir.',
+        'What government policies could help stop deforestation? Research any existing forest protection laws in J&K.',
+        'Design a school project to raise awareness about forest conservation in your community.'
+      ]
+    },
+    diagram: 'mindmap',
+    simulation: 'resources',
+    timelineData: []
+  },
+  {
+    id: 7, num: 'Chapter 7', subject: 'geography',
+    title: 'Human Environment (Settlement & Life)',
+    icon: '🏘️',
+    concept: `
+      <div class="concept-box">
+        <h3>🧠 Human Settlements</h3>
+        <p>A <span class="key-term">settlement</span> is a place where people establish homes and form communities. Human settlements have evolved from temporary nomadic camps to permanent modern cities.</p>
+        <p><strong>Types of Settlements:</strong></p>
+        <ul>
+          <li><span class="key-term">Rural Settlements</span> – Villages; people mainly work in agriculture; smaller population</li>
+          <li><span class="key-term">Urban Settlements</span> – Cities and towns; diverse occupations, larger population</li>
+          <li><span class="key-term">Temporary Settlements</span> – Seasonal shelters (nomads, construction workers)</li>
+        </ul>
+      </div>
+      <div class="concept-box">
+        <h3>🏙️ Factors Affecting Settlements</h3>
+        <p>People settle where:</p>
+        <ul>
+          <li><span class="key-term">Water</span> is available (rivers, lakes, wells)</li>
+          <li><span class="key-term">Climate</span> is suitable for living and farming</li>
+          <li><span class="key-term">Land</span> is fertile for agriculture</li>
+          <li><span class="key-term">Transport</span> is accessible (roads, rivers, railways)</li>
+          <li><span class="key-term">Defense</span> – safe locations (hills, forests in ancient times)</li>
+        </ul>
+      </div>
+      <div class="concept-box">
+        <h3>🌆 Urbanization</h3>
+        <p>The movement of people from rural areas to cities is called <span class="key-term">urbanization</span>. Modern challenges include: urban poverty, traffic congestion, pollution, slums, and pressure on infrastructure.</p>
+        <p>J&K example: Srinagar is the largest city; surrounded by villages that are gradually becoming urbanized.</p>
+      </div>
+    `,
+    flashcards: [
+      { q: 'What is a settlement?', a: 'A place where people establish their homes and form communities' },
+      { q: 'Difference between rural and urban settlements?', a: 'Rural = villages, agriculture-based; Urban = cities, diverse industries and services' },
+      { q: 'What is urbanization?', a: 'The process by which more and more people move from rural areas to cities' },
+      { q: 'Name 3 factors that determine where people settle', a: 'Availability of water, fertile land, suitable climate, good transport, or safety/defense' },
+      { q: 'What is a temporary settlement?', a: 'A short-term habitation like nomadic camps or seasonal worker shelters' }
+    ],
+    quiz: [
+      { q: 'A village where people mainly farm is an example of:', opts: ['Urban settlement', 'Temporary settlement', 'Rural settlement', 'Industrial settlement'], ans: 2, exp: 'Villages where agriculture is the main occupation are examples of rural settlements.' },
+      { q: 'The movement of people from villages to cities is called:', opts: ['Migration', 'Urbanization', 'Industrialization', 'Modernization'], ans: 1, exp: 'Urbanization specifically refers to the process of people moving from rural areas to urban areas (cities and towns).' },
+      { q: 'Ancient people preferred to settle near rivers because:', opts: ['Rivers are beautiful', 'Rivers provide water and fertile soil', 'Rivers provide electricity', 'Rivers are safe from enemies'], ans: 1, exp: 'Ancient settlements near rivers had access to fresh water for drinking, farming, and transportation.' },
+      { q: 'Srinagar is an example of a:', opts: ['Rural settlement', 'Temporary settlement', 'Urban settlement', 'Industrial settlement'], ans: 2, exp: 'Srinagar is the largest city (urban center) of J&K, with diverse industries, services, and a large population.' },
+      { q: 'One problem of rapid urbanization is:', opts: ['Too many farmers', 'Urban poverty and slums', 'Excess food production', 'Too many schools'], ans: 1, exp: 'Rapid urbanization leads to urban poverty, slums, overcrowding, traffic, and strain on city infrastructure.' }
+    ],
+    competency: [
+      { q: 'Compare the lifestyle of a family living in a remote village in Kashmir with a family living in Srinagar city. Consider: transportation, education, healthcare, and livelihood.', a: 'Village family: depends on agriculture, limited transport, may walk to school, basic healthcare, close community ties. Srinagar family: diverse jobs, good transport (buses, autos), better schools and hospitals, more economic opportunities. Challenges: urban cost of living, less community connection.' },
+      { q: 'Your village is growing rapidly as people from surrounding areas move in. As a village leader, what infrastructure would you prioritize developing and why?', a: 'Priority infrastructure: Clean water supply (basic need), sanitation/sewage, roads for connectivity, a school (education), healthcare center, electricity. Reasoning: These meet basic needs and help further economic development. Should also plan green spaces and waste management to prevent urban problems.' }
+    ],
+    reflection: [
+      { q: 'Would you prefer to live in a village or a city? Think about the advantages and disadvantages of each and explain your choice.' },
+      { q: 'In J&K, many people follow seasonal migration (moving to summer and winter pastures). What does this tell us about how geography shapes human life?' }
+    ],
+    caseStudy: {
+      title: 'Case Study: Growth of Srinagar City',
+      content: 'Srinagar, the summer capital of J&K, has grown from a small medieval town to a major city. The city\'s growth was shaped by its location on the Jhelum River and the Dal Lake, which provided water and connected trade routes. Today, Srinagar faces challenges: traffic congestion, encroachment on water bodies, waste management, and the impact of tourism on infrastructure.',
+      activities: [
+        'Draw a simple sketch map of Srinagar showing the Jhelum River, Dal Lake, and main areas.',
+        'What factor do you think was MOST important in Srinagar\'s growth? Give reasons.',
+        'Suggest two solutions for managing Srinagar\'s traffic problem.'
+      ]
+    },
+    diagram: 'mindmap',
+    simulation: 'environment',
+    timelineData: []
+  },
+  // CIVICS
+  {
+    id: 8, num: 'Chapter 8', subject: 'civics',
+    title: 'Democracy and Government',
+    icon: '⚖️',
+    concept: `
+      <div class="concept-box">
+        <h3>🧠 What is Democracy?</h3>
+        <p><span class="key-term">Democracy</span> is a system of government where power belongs to the people. The word comes from Greek: "demos" (people) + "kratos" (rule). Abraham Lincoln defined it as: <em>"Government of the people, by the people, for the people."</em></p>
+        <p><strong>Types of Democracy:</strong></p>
+        <ul>
+          <li><span class="key-term">Direct Democracy</span> – People vote directly on every issue (ancient Athens)</li>
+          <li><span class="key-term">Representative Democracy</span> – People elect representatives who govern on their behalf (India)</li>
+        </ul>
+      </div>
+      <div class="concept-box">
+        <h3>🏛 Indian Democracy</h3>
+        <p>India is the world's largest democracy. Key features:</p>
+        <ul>
+          <li><span class="key-term">Universal Adult Franchise</span> – Every citizen above 18 can vote</li>
+          <li><span class="key-term">Free and Fair Elections</span> – Conducted by the Election Commission</li>
+          <li><span class="key-term">Rule of Law</span> – Everyone is equal before the law</li>
+          <li><span class="key-term">Fundamental Rights</span> – Rights guaranteed by the Constitution</li>
+          <li><span class="key-term">Independent Judiciary</span> – Courts are independent from government</li>
+        </ul>
+      </div>
+      <div class="concept-box">
+        <h3>🔧 Levels of Government</h3>
+        <ul>
+          <li><span class="key-term">Central/Union Government</span> – Governs the entire country (Parliament)</li>
+          <li><span class="key-term">State Government</span> – Governs each state (Legislative Assembly)</li>
+          <li><span class="key-term">Local Government</span> – Panchayats (villages), Municipalities (towns/cities)</li>
+        </ul>
+      </div>
+    `,
+    flashcards: [
+      { q: 'What does "democracy" mean?', a: 'Government of the people, by the people, for the people (from Greek: demos = people, kratos = rule)' },
+      { q: 'What is Universal Adult Franchise?', a: 'The right of every adult citizen (18 years or above) to vote in elections, regardless of gender, caste, religion, or wealth' },
+      { q: 'What is the difference between direct and representative democracy?', a: 'Direct: people vote on every decision; Representative: people elect representatives who make decisions on their behalf' },
+      { q: 'Who conducts elections in India?', a: 'The Election Commission of India – an independent constitutional body' },
+      { q: 'What is the Rule of Law?', a: 'The principle that everyone, including rulers and government, is subject to and equal before the law' }
+    ],
+    quiz: [
+      { q: '"Government of the people, by the people, for the people" was said by:', opts: ['Mahatma Gandhi', 'Abraham Lincoln', 'Dr. B.R. Ambedkar', 'Jawaharlal Nehru'], ans: 1, exp: 'This famous definition of democracy was given by US President Abraham Lincoln in the Gettysburg Address (1863).' },
+      { q: 'In India, who can vote in elections?', opts: ['Only educated people', 'Only men', 'Every citizen above 18 years', 'Only property owners'], ans: 2, exp: 'Universal Adult Franchise in India gives every citizen above 18 the right to vote, regardless of gender, caste, or wealth.' },
+      { q: 'Panchayats are examples of:', opts: ['Central government', 'State government', 'Local government', 'Judiciary'], ans: 2, exp: 'Panchayats are local self-government bodies in rural areas, part of the third tier of democratic governance in India.' },
+      { q: 'India\'s elections are conducted by:', opts: ['The President', 'The Prime Minister', 'The Supreme Court', 'The Election Commission'], ans: 3, exp: 'The Election Commission of India is an independent constitutional body responsible for administering elections.' },
+      { q: 'Which country is the world\'s largest democracy?', opts: ['USA', 'China', 'India', 'UK'], ans: 2, exp: 'India is the world\'s largest democracy with over 900 million eligible voters.' }
+    ],
+    competency: [
+      { q: 'Your village Panchayat is deciding whether to build a new school or repair the road. As a student representative, how would you make your case? What democratic processes would be involved?', a: 'Present data: number of students needing school, distance to current school. Use democratic process: call a gram sabha meeting, allow villagers to discuss both options, take a vote, respect the majority decision while addressing minority concerns. The elected Sarpanch should ensure all voices are heard.' },
+      { q: 'Some people say "Democracy is slow and inefficient. Dictatorship gets things done faster." Do you agree or disagree? Give reasons for and against this argument.', a: 'For the argument: Dictators can make quick decisions without debate. Against: Without accountability, power corrupts; human rights are violated; decisions may not represent people\'s needs; history shows dictatorships often fail. Democracy\'s "slowness" actually ensures careful, representative decision-making that serves all people.' }
+    ],
+    reflection: [
+      { q: 'You are 12 years old and cannot vote yet. But democracy affects you every day. In what ways does your school or community use democratic principles?' },
+      { q: 'What would life be like in India if there were no elections? Who would decide how the country is run?' }
+    ],
+    caseStudy: {
+      title: 'Case Study: How a Law is Made in India',
+      content: 'Imagine citizens in a state are concerned about water pollution. A member of the Legislative Assembly (MLA) introduces a bill. The bill is debated in the assembly; members argue for and against it. The assembly votes on the bill. If passed, the Governor signs it into law. The new law sets pollution standards and penalties for factories.',
+      activities: [
+        'Identify the democratic principles at work in this process.',
+        'What role do citizens play in this democratic process, even before the law is introduced?',
+        'Think of a problem in your area. How would you go about getting a law passed to address it?'
+      ]
+    },
+    diagram: 'mindmap',
+    simulation: 'democracy',
+    timelineData: []
+  },
+  {
+    id: 9, num: 'Chapter 9', subject: 'civics',
+    title: 'Role of Media in Democracy',
+    icon: '📺',
+    concept: `
+      <div class="concept-box">
+        <h3>🧠 What is Media?</h3>
+        <p><span class="key-term">Media</span> refers to all means of communication used to reach and influence large numbers of people. It includes newspapers, television, radio, and the internet (social media, websites).</p>
+        <p><strong>Types of Media:</strong></p>
+        <ul>
+          <li><span class="key-term">Print Media</span> – Newspapers, magazines, books, pamphlets</li>
+          <li><span class="key-term">Electronic Media</span> – Television, radio, cinema</li>
+          <li><span class="key-term">Digital/Social Media</span> – Internet, social networks, apps, podcasts</li>
+        </ul>
+      </div>
+      <div class="concept-box">
+        <h3>🗣️ Role of Media in Democracy</h3>
+        <ul>
+          <li><span class="key-term">Information</span> – Keeps citizens informed about government actions and events</li>
+          <li><span class="key-term">Watchdog</span> – Investigates corruption and government failures (investigative journalism)</li>
+          <li><span class="key-term">Platform</span> – Gives voice to different sections of society, including marginalized groups</li>
+          <li><span class="key-term">Public Opinion</span> – Shapes and reflects public views on issues</li>
+          <li><span class="key-term">Agenda Setting</span> – Brings important issues to the public's attention</li>
+        </ul>
+      </div>
+      <div class="concept-box">
+        <h3>⚠️ Challenges to Media</h3>
+        <p>The media also faces challenges: <span class="key-term">fake news and misinformation</span>, media bias, commercial pressure, and censorship. Citizens must develop <span class="key-term">media literacy</span> – the ability to critically evaluate information from media sources.</p>
+      </div>
+    `,
+    flashcards: [
+      { q: 'What is "investigative journalism"?', a: 'In-depth reporting where journalists uncover hidden facts, corruption, or wrongdoing that those in power try to hide' },
+      { q: 'Name three types of media', a: 'Print (newspapers), Electronic (TV, radio), Digital (internet, social media)' },
+      { q: 'What is "media literacy"?', a: 'The ability to access, analyze, evaluate, and create media content critically' },
+      { q: 'Why is media called the "Fourth Estate"?', a: 'Because it acts as an unofficial fourth pillar of democracy alongside the legislature, executive, and judiciary – holding all three accountable' },
+      { q: 'What is fake news?', a: 'False or misleading information presented as if it were real news, often spread deliberately to mislead people' }
+    ],
+    quiz: [
+      { q: 'Media is called the "Fourth Estate" because it:', opts: ['Makes laws', 'Holds the government accountable', 'Runs the courts', 'Collects taxes'], ans: 1, exp: 'Media is called the Fourth Estate because it acts as an unofficial watchdog, keeping the other three branches of government (legislature, executive, judiciary) accountable.' },
+      { q: 'Newspapers and magazines are examples of:', opts: ['Electronic media', 'Digital media', 'Print media', 'Social media'], ans: 2, exp: 'Newspapers and magazines are examples of print media – the oldest form of mass communication.' },
+      { q: 'Which is NOT a role of media in democracy?', opts: ['Informing citizens', 'Making government laws', 'Investigating corruption', 'Giving voice to people'], ans: 1, exp: 'Media does not make laws – that is the role of the legislature. Media informs, investigates, and provides a platform for public voice.' },
+      { q: 'Media literacy means the ability to:', opts: ['Read newspapers quickly', 'Watch many news channels', 'Critically evaluate media content', 'Write for newspapers'], ans: 2, exp: 'Media literacy is the critical ability to access, analyze, evaluate, and understand media messages.' },
+      { q: 'Social media is an example of:', opts: ['Print media', 'Electronic media', 'Digital media', 'None of these'], ans: 2, exp: 'Social media platforms like WhatsApp, Facebook, and Instagram are examples of digital media.' }
+    ],
+    competency: [
+      { q: 'You see a WhatsApp message claiming that a school in your area is closing due to floods, but you\'re not sure if it\'s true. Apply media literacy skills: How would you verify this information before sharing it?', a: 'Steps: 1) Check official sources – school website, government announcement. 2) Look for multiple credible news sources reporting the same. 3) Call the school directly. 4) Check if the message has images/videos that match the claim. 5) Do NOT share until verified. Sharing false information can cause panic.' },
+      { q: 'A local newspaper investigates that a factory is polluting a river. Trace how this news story could lead to positive change in a democracy.', a: 'Sequence: Journalist investigates → story published → citizens become aware → public pressure mounts → politicians are questioned → opposition raises issue in legislature → government orders investigation → factory fined/closed → river pollution decreases. This shows media\'s watchdog role in democracy.' }
+    ],
+    reflection: [
+      { q: 'Think about the last news story you heard or read. How do you know whether it was true or false? What clues did you look for?' },
+      { q: 'Social media gives everyone a "voice." Is this always good for democracy? What problems can arise when everyone can publish information instantly?' }
+    ],
+    caseStudy: {
+      title: 'Case Study: Media and the Right to Information',
+      content: 'In 2005, India passed the Right to Information (RTI) Act, allowing any citizen to ask the government for information. Media organizations use RTI to expose corruption and government failures. For example, an RTI request revealed that a government project meant to provide clean water to a village was never actually completed, even though the government claimed it was and spent the money.',
+      activities: [
+        'How does the RTI Act strengthen both media and democracy in India?',
+        'What information would YOU want to access about your local government using RTI?',
+        'Identify two ways citizens can hold their government accountable without using formal legal tools like RTI.'
+      ]
+    },
+    diagram: 'mindmap',
+    simulation: 'media',
+    timelineData: []
+  },
+  {
+    id: 10, num: 'Chapter 10', subject: 'civics',
+    title: 'Markets Around Us',
+    icon: '🛒',
+    concept: `
+      <div class="concept-box">
+        <h3>🧠 What is a Market?</h3>
+        <p>A <span class="key-term">market</span> is any place or system where buyers and sellers come together to exchange goods and services. Markets can be physical (bazaars, shops) or virtual (online shopping).</p>
+      </div>
+      <div class="concept-box">
+        <h3>🏪 Types of Markets</h3>
+        <ul>
+          <li><span class="key-term">Weekly Markets</span> – Held on specific days; mainly for necessities; lower prices</li>
+          <li><span class="key-term">Neighbourhood Shops</span> – Convenience stores for daily needs in residential areas</li>
+          <li><span class="key-term">Shopping Complexes/Malls</span> – Large stores with many products; fixed prices</li>
+          <li><span class="key-term">Chain Stores</span> – Same brand with multiple outlets (e.g., Big Bazaar)</li>
+          <li><span class="key-term">Online/E-Commerce</span> – Buying and selling through websites/apps (Amazon, Flipkart)</li>
+        </ul>
+      </div>
+      <div class="concept-box">
+        <h3>🔄 Market Chain</h3>
+        <p>Goods travel through a chain before reaching the consumer:</p>
+        <p>Producer → Wholesaler → Retailer → Consumer</p>
+        <p>Each link in the chain adds cost. This is why goods from producers are cheaper than in shops. <span class="key-term">Middlemen</span> add value by transporting, storing, and distributing goods.</p>
+      </div>
+      <div class="concept-box">
+        <h3>⚖️ Consumer Rights</h3>
+        <p>As a consumer, you have rights: Right to information, Right to choose, Right to safety, Right to be heard, and Right to redressal. The <span class="key-term">Consumer Protection Act</span> protects these rights.</p>
+      </div>
+    `,
+    flashcards: [
+      { q: 'What is a market?', a: 'Any place or system where buyers and sellers meet to exchange goods and services' },
+      { q: 'Explain the chain from producer to consumer', a: 'Producer → Wholesaler → Retailer → Consumer; each step adds distribution cost' },
+      { q: 'What are "middlemen"?', a: 'People or businesses that buy from producers and sell to retailers, helping move goods through the supply chain' },
+      { q: 'Name two consumer rights', a: 'Right to information, Right to safety, Right to choose, Right to redressal (any two)' },
+      { q: 'What is e-commerce?', a: 'Buying and selling goods and services online through websites and mobile applications' }
+    ],
+    quiz: [
+      { q: 'A weekly market is held:', opts: ['Every day', 'On specific days of the week', 'Only on festivals', 'Only in cities'], ans: 1, exp: 'Weekly markets (haats) are held on specific days of the week, often catering to rural and semi-urban populations with basic necessities.' },
+      { q: 'In the market chain, who sells directly to the consumer?', opts: ['Producer', 'Wholesaler', 'Retailer', 'Distributor'], ans: 2, exp: 'The retailer is the final link in the chain who sells goods directly to the end consumer.' },
+      { q: 'Online shopping is an example of:', opts: ['Weekly market', 'Chain store', 'E-commerce', 'Neighbourhood shop'], ans: 2, exp: 'Online shopping through websites/apps like Amazon or Flipkart is called e-commerce (electronic commerce).' },
+      { q: 'Consumer Protection Act was passed to:', opts: ['Protect sellers from buyers', 'Protect consumers from unfair trade practices', 'Control market prices', 'Regulate imports'], ans: 1, exp: 'The Consumer Protection Act protects consumers\' rights and provides a legal mechanism to address consumer grievances.' },
+      { q: 'Which type of market typically has the lowest prices for goods?', opts: ['Shopping malls', 'Chain stores', 'Weekly markets', 'Online stores'], ans: 2, exp: 'Weekly markets often have lower prices because sellers have lower overhead costs and there is direct competition between vendors.' }
+    ],
+    competency: [
+      { q: 'A farmer grows apples in Kashmir. Trace the journey of one apple from the orchard to a consumer in Delhi. At each step, identify who is involved and how the price increases.', a: 'Farmer grows apple (cost: ₹5) → Local agent/mandi purchases batch (markup: ₹3) → Wholesale truck transport to Delhi (cost: ₹4) → Delhi wholesaler (markup: ₹5) → Delhi retailer/fruit stall (markup: ₹8) → Consumer buys at ₹25. Price increased from ₹5 to ₹25 – showing how each middleman adds cost.' },
+      { q: 'You discover that a shopkeeper has sold you a food item that is past its expiry date. What consumer rights have been violated? What steps can you take?', a: 'Rights violated: Right to safety (unsafe product), Right to information (misleading about expiry). Steps: 1) Return product and demand refund, 2) Keep receipt and expired product as evidence, 3) File complaint at Consumer Forum/court, 4) Contact Food Safety authority (FSSAI), 5) Inform other consumers. The Consumer Protection Act supports your claim.' }
+    ],
+    reflection: [
+      { q: 'Think about the weekly bazaar near your home or school. Who are the sellers? Who are the buyers? What kinds of goods are sold? How is it different from an online market?' },
+      { q: 'Online shopping is growing rapidly. Do you think it is good or bad for small local shopkeepers? Explain your answer.' }
+    ],
+    caseStudy: {
+      title: 'Case Study: The Apple Market in Kashmir',
+      content: 'Kashmir produces about 70% of India\'s apples. Thousands of families depend on apple orchards for their livelihood. However, the journey from Kashmir\'s orchards to markets in Delhi and other cities involves multiple middlemen: local agents, transporters, wholesale markets (mandis), and retailers. Each person in this chain earns a profit, which means the farmer often receives only 20-30% of the final consumer price.',
+      activities: [
+        'Why do farmers earn less money than retailers for the same product?',
+        'How could technology or government intervention help Kashmir\'s apple farmers get better prices?',
+        'Research: What is the e-NAM (National Agriculture Market) and how can it help farmers in J&K?'
+      ]
+    },
+    diagram: 'mindmap',
+    simulation: 'market',
+    timelineData: []
+  }
+];
+
+// ===== STATE =====
+let appState = {
+  progress: {},
+  quizScores: {},
+  flashcardCounts: {},
+  notes: [],
+  bookmarks: [],
+  currentChapterId: null,
+  currentQuizQ: 0,
+  currentQuizAnswers: {},
+  currentFCIndex: 0,
+  currentFCChapter: null,
+  theme: 'dark',
+  quizPool: [],
+  quizCurrentQ: 0,
+  quizAnswers: {}
+};
+
+// Load from localStorage
+function loadState() {
+  try {
+    const saved = localStorage.getItem('jkbose7sst');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      appState = { ...appState, ...parsed };
+    }
+  } catch(e) {}
+}
+
+function saveState() {
+  try {
+    localStorage.setItem('jkbose7sst', JSON.stringify(appState));
+  } catch(e) {}
+}
+
+// ===== PARTICLES =====
+function createParticles() {
+  const container = document.getElementById('particles');
+  const colors = ['rgba(245,166,35,0.6)', 'rgba(233,69,96,0.5)', 'rgba(26,188,156,0.5)', 'rgba(255,255,255,0.3)'];
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 6 + 2;
+    p.style.cssText = `
+      width:${size}px;height:${size}px;
+      left:${Math.random()*100}%;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      animation-duration:${Math.random()*10+8}s;
+      animation-delay:${Math.random()*10}s;
+    `;
+    container.appendChild(p);
+  }
+}
+
+// ===== APP INIT =====
+function startApp() {
+  document.getElementById('titleScreen').classList.remove('active');
+  document.getElementById('appScreen').classList.add('active');
+  initApp();
+}
+
+function initApp() {
+  loadState();
+  renderChapterCards();
+  renderAllChapters();
+  renderMainTimeline();
+  renderResourceBars();
+  populateSelects();
+  updateStats();
+  renderProgress();
+  renderBadges();
+  renderSavedNotes();
+  renderGlobalFlashcards();
+  initQuizMode();
+  if (appState.theme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    document.getElementById('themeBtn').textContent = '☀️ Light';
+  }
+}
+
+function goHome() {
+  document.getElementById('chapterScreen').classList.remove('active');
+  document.getElementById('appScreen').classList.add('active');
+  switchTab('home');
+}
+
+// ===== TAB SWITCHING =====
+function switchTab(tab) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.bottom-nav-item').forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById('tab-' + tab);
+  if (panel) panel.classList.add('active');
+  const navBtn = document.getElementById('nav-' + tab);
+  if (navBtn) navBtn.classList.add('active');
+}
+
+// ===== CHAPTER CARDS =====
+function renderChapterCards() {
+  const historyEl = document.getElementById('historyChapters');
+  const geoEl = document.getElementById('geoChapters');
+  const civicsEl = document.getElementById('civicsChapters');
+  historyEl.innerHTML = '';
+  geoEl.innerHTML = '';
+  civicsEl.innerHTML = '';
+
+  CHAPTERS.forEach(ch => {
+    const progress = appState.progress[ch.id] || 0;
+    const card = createChapterCard(ch, progress);
+    if (ch.subject === 'history') historyEl.appendChild(card);
+    else if (ch.subject === 'geography') geoEl.appendChild(card);
+    else civicsEl.appendChild(card);
+  });
+}
+
+function renderAllChapters() {
+  const el = document.getElementById('allChapters');
+  el.innerHTML = '';
+  CHAPTERS.forEach(ch => {
+    const progress = appState.progress[ch.id] || 0;
+    el.appendChild(createChapterCard(ch, progress));
+  });
+}
+
+function createChapterCard(ch, progress) {
+  const card = document.createElement('div');
+  card.className = `chapter-card ${ch.subject}`;
+  const subjectLabels = { history: '🏺 History', geography: '🌍 Geography', civics: '🏛 Civics' };
+  card.innerHTML = `
+    <div class="chapter-num">${ch.num} &nbsp; ${ch.icon}</div>
+    <div class="chapter-title-text">${ch.title}</div>
+    <div class="chapter-meta">
+      <span class="chapter-subject-tag ${ch.subject}">${subjectLabels[ch.subject]}</span>
+      <span class="chapter-arrow">→</span>
+    </div>
+    <div class="chapter-progress-bar">
+      <div class="chapter-progress-fill" style="width:${progress}%"></div>
+    </div>
+  `;
+  card.onclick = () => openChapter(ch.id);
+  return card;
+}
+
+// ===== CHAPTER DETAIL =====
+function openChapter(id) {
+  const ch = CHAPTERS.find(c => c.id === id);
+  if (!ch) return;
+  appState.currentChapterId = id;
+  
+  document.getElementById('appScreen').classList.remove('active');
+  const chScreen = document.getElementById('chapterScreen');
+  chScreen.classList.add('active');
+  chScreen.classList.add('slide-in');
+  
+  document.getElementById('chHeaderNum').textContent = ch.num + ' | ' + ch.subject.charAt(0).toUpperCase() + ch.subject.slice(1);
+  document.getElementById('chHeaderTitle').textContent = ch.title;
+  
+  // Show first section
+  showSection('concept');
+  
+  // Render all sections
+  renderConcept(ch);
+  renderDiagram(ch);
+  renderSimulation(ch);
+  renderFlashcardsSection(ch);
+  renderQuizSection(ch);
+  renderCompetency(ch);
+  renderReflection(ch);
+  renderCaseStudy(ch);
+  
+  // Update progress
+  if (!appState.progress[id]) {
+    appState.progress[id] = 10;
+  } else if (appState.progress[id] < 100) {
+    appState.progress[id] = Math.min(appState.progress[id] + 5, 100);
+  }
+  saveState();
+  updateStats();
+}
+
+function closeChapter() {
+  document.getElementById('chapterScreen').classList.remove('active');
+  document.getElementById('appScreen').classList.add('active');
+  renderChapterCards();
+  renderAllChapters();
+  renderProgress();
+  renderBadges();
+}
+
+function showSection(section) {
+  document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.section-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('sec-' + section).classList.add('active');
+  const tabs = document.querySelectorAll('.section-tab');
+  const sectionMap = { concept: 0, diagram: 1, simulation: 2, flashcards: 3, quiz: 4, competency: 5, reflection: 6, casestudy: 7 };
+  if (tabs[sectionMap[section]]) tabs[sectionMap[section]].classList.add('active');
+}
+
+// ===== RENDER CONCEPT =====
+function renderConcept(ch) {
+  document.getElementById('sec-concept').innerHTML = ch.concept;
+}
+
+// ===== RENDER DIAGRAM =====
+function renderDiagram(ch) {
+  const el = document.getElementById('sec-diagram');
+  
+  if (ch.diagram === 'timeline' || ch.timelineData.length > 0) {
+    let html = `<div class="diagram-box"><div class="diagram-title">📅 Historical Timeline</div><div class="timeline">`;
+    ch.timelineData.forEach(item => {
+      html += `<div class="timeline-item">
+        <div class="timeline-content">
+          <div class="timeline-year">${item.year}</div>
+          <div class="timeline-event">${item.event}</div>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>`;
+    });
+    html += `</div></div>`;
+    
+    // Always add mindmap too
+    html += renderMindmapHTML(ch);
+    el.innerHTML = html;
+  } else {
+    el.innerHTML = renderMindmapHTML(ch);
+  }
+}
+
+function renderMindmapHTML(ch) {
+  const nodes = ch.flashcards.map(f => f.q.length > 30 ? f.q.substring(0, 30) + '...' : f.q);
+  let html = `<div class="diagram-box"><div class="diagram-title">🧠 Concept Mind Map</div>
+    <div class="mindmap">
+      <div class="mindmap-center">${ch.icon} ${ch.title}</div>
+      <div class="mindmap-branches">`;
+  nodes.forEach(n => {
+    html += `<div class="mindmap-node">${n}</div>`;
+  });
+  html += `</div></div></div>`;
+  return html;
+}
+
+// ===== RENDER SIMULATION =====
+function renderSimulation(ch) {
+  const el = document.getElementById('sec-simulation');
+  
+  if (ch.subject === 'history') {
+    el.innerHTML = `
+      <div class="simulation-box">
+        <div class="sim-header"><span>🗺️</span><h3>Empire Timeline Explorer</h3></div>
+        <div class="sim-body">
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">Click on time periods to explore the ${ch.title}</p>
+          <div class="empire-map" id="empireMap">
+            <div style="font-size:13px;color:#90ee90;margin-bottom:16px;font-weight:700">🗺️ MEDIEVAL INDIA – POLITICAL MAP</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+              ${ch.timelineData.map((item, i) => `
+                <div onclick="showEmpireEvent(${i})" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:10px;cursor:pointer;transition:all 0.3s" onmouseover="this.style.background='rgba(245,166,35,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+                  <div style="color:var(--gold);font-size:11px;font-weight:700">${item.year}</div>
+                  <div style="color:white;font-size:12px;margin-top:4px">${item.event}</div>
+                </div>
+              `).join('')}
+            </div>
+            <div id="empireEventDetail" style="margin-top:16px;padding:14px;background:rgba(0,0,0,0.3);border-radius:8px;min-height:60px;font-size:13px;color:white;display:none"></div>
+          </div>
+        </div>
+      </div>
+      <div class="simulation-box">
+        <div class="sim-header"><span>🏛️</span><h3>Monument Explorer</h3></div>
+        <div class="sim-body">
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
+            ${[
+              {name:'Qutb Minar', info:'Tallest minaret in India, Delhi. Built in 1193 by Slave Dynasty.', icon:'🕌'},
+              {name:'Taj Mahal', info:'Built by Shah Jahan in 1632-1653. Made of white marble. UNESCO World Heritage Site.', icon:'🕍'},
+              {name:'Red Fort', info:'Mughal fort in Delhi, built by Shah Jahan. Symbol of Indian sovereignty.', icon:'🏰'},
+              {name:'Fatehpur Sikri', info:'Akbar\'s planned capital (1571). Blend of Hindu and Islamic architecture.', icon:'🏛️'}
+            ].map(m => `
+              <div onclick="this.querySelector('.mon-info').style.display = this.querySelector('.mon-info').style.display==='block'?'none':'block'" 
+                   style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all 0.3s" 
+                   onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'">
+                <div style="font-size:30px;margin-bottom:6px">${m.icon}</div>
+                <div style="font-size:13px;font-weight:700">${m.name}</div>
+                <div class="mon-info" style="display:none;font-size:12px;color:var(--text-muted);margin-top:8px">${m.info}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+    window._simTimeline = ch.timelineData;
+  }
+  
+  else if (ch.subject === 'geography') {
+    el.innerHTML = `
+      <div class="simulation-box">
+        <div class="sim-header"><span>🌍</span><h3>Environment & Resources Simulation</h3></div>
+        <div class="sim-body">
+          <div style="margin-bottom:16px">
+            <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">Move the sliders to see the impact of resource use:</p>
+          </div>
+          <div id="geoSimSliders">
+            ${[
+              {label:'🌲 Forest Cover', id:'forestSlider', val:70, effect:'Affects oxygen, rainfall, and biodiversity'},
+              {label:'💧 Water Usage', id:'waterSlider', val:40, effect:'Affects availability for future generations'},
+              {label:'🏭 Industrial Activity', id:'industrySlider', val:50, effect:'Affects air and water pollution levels'}
+            ].map(s => `
+              <div style="margin-bottom:16px">
+                <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px">
+                  <span>${s.label}</span>
+                  <span id="${s.id}Val">${s.val}%</span>
+                </div>
+                <input type="range" min="0" max="100" value="${s.val}" id="${s.id}" 
+                  style="width:100%;accent-color:var(--teal)" 
+                  oninput="updateGeoSim('${s.id}', this.value)">
+                <div style="font-size:11px;color:var(--text-muted);margin-top:4px">${s.effect}</div>
+              </div>
+            `).join('')}
+          </div>
+          <div id="geoSimResult" style="padding:14px;background:rgba(39,174,96,0.15);border:1px solid rgba(39,174,96,0.3);border-radius:10px;font-size:13px;color:var(--green);margin-top:12px">
+            🌱 Environment Status: Healthy – Balanced use of resources
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  
+  else if (ch.subject === 'civics') {
+    el.innerHTML = `
+      <div class="simulation-box">
+        <div class="sim-header"><span>🗳️</span><h3>Democracy Simulation Game</h3></div>
+        <div class="sim-body">
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">You are a citizen. Make democratic decisions:</p>
+          <div class="democracy-game">
+            ${[
+              {
+                q:'Your village needs funds. The government asks: What should be the priority?',
+                opts:['Build a new road', 'Repair the school', 'Set up a health center', 'Install solar lights'],
+                exp:['Roads improve connectivity and trade.','Education is key for future generations.','Healthcare saves lives.','Solar lights improve safety and study time.']
+              },
+              {
+                q:'A company wants to build a factory near your village that will bring jobs but may pollute the river. What do you vote for?',
+                opts:['Allow the factory completely', 'Allow with strict environmental conditions', 'Reject the factory', 'Demand more information first'],
+                exp:['Creates jobs but risks environment.','Balances development and environment.','Protects environment but loses jobs.','Informed decision-making is democratic.']
+              }
+            ].map((scenario, si) => `
+              <div class="vote-scenario" id="vscen${si}">
+                <div class="vote-scenario-q">Scenario ${si+1}: ${scenario.q}</div>
+                <div class="vote-options">
+                  ${scenario.opts.map((opt, oi) => `
+                    <div class="vote-opt" onclick="castVote(${si}, ${oi})" id="vopt${si}_${oi}">${opt}</div>
+                  `).join('')}
+                </div>
+                <div class="vote-result" id="vres${si}"></div>
+              </div>
+            `).join('')}
+            ${ch.id === 9 ? `
+              <div class="vote-scenario">
+                <div class="vote-scenario-q">Media Challenge: Rate these news sources for reliability:</div>
+                <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
+                  ${[
+                    {src:'WhatsApp forward with no source', color:'#e74c3c'},
+                    {src:'Government official press release', color:'#27ae60'},
+                    {src:'Verified news channel report', color:'#27ae60'},
+                    {src:'Anonymous social media post', color:'#e74c3c'},
+                    {src:'Peer-reviewed academic paper', color:'#27ae60'}
+                  ].map(s => `
+                    <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--surface2);border-radius:8px">
+                      <div style="width:10px;height:10px;border-radius:50%;background:${s.color};flex-shrink:0"></div>
+                      <span style="font-size:13px">${s.src}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      </div>
+    `;
+    window._demoScenarios = [
+      {
+        exp:['Roads improve connectivity and trade.','Education is key for future generations.','Healthcare saves lives.','Solar lights improve safety and study time.']
+      },
+      {
+        exp:['Creates jobs but risks environment.','Balances development and environment.','Protects environment but loses jobs.','Informed decision-making is democratic.']
+      }
+    ];
+  }
+}
+
+window.castVote = function(si, oi) {
+  const opts = document.querySelectorAll(`[id^="vopt${si}_"]`);
+  opts.forEach(o => o.classList.remove('chosen'));
+  document.getElementById(`vopt${si}_${oi}`).classList.add('chosen');
+  const res = document.getElementById(`vres${si}`);
+  res.textContent = '✅ Your choice: ' + window._demoScenarios[si].exp[oi] + ' In a democracy, majority vote decides!';
+  res.classList.add('show');
+};
+
+window.showEmpireEvent = function(i) {
+  const detail = document.getElementById('empireEventDetail');
+  const item = window._simTimeline[i];
+  detail.style.display = 'block';
+  detail.innerHTML = `<strong style="color:var(--gold)">${item.year}</strong><br>${item.event}<br><br><span style="color:var(--text-muted);font-size:12px">This event significantly shaped the course of medieval Indian history.</span>`;
+};
+
+window.updateGeoSim = function(id, val) {
+  document.getElementById(id + 'Val').textContent = val + '%';
+  const forest = parseInt(document.getElementById('forestSlider')?.value || 70);
+  const water = parseInt(document.getElementById('waterSlider')?.value || 40);
+  const industry = parseInt(document.getElementById('industrySlider')?.value || 50);
+  const health = Math.round((forest - industry/3 + (100-water)/3));
+  const resultEl = document.getElementById('geoSimResult');
+  if (health > 60) {
+    resultEl.style.background = 'rgba(39,174,96,0.15)';
+    resultEl.style.borderColor = 'rgba(39,174,96,0.3)';
+    resultEl.style.color = 'var(--green)';
+    resultEl.innerHTML = '🌱 Environment Status: Healthy – Good balance of resources';
+  } else if (health > 30) {
+    resultEl.style.background = 'rgba(245,166,35,0.15)';
+    resultEl.style.borderColor = 'rgba(245,166,35,0.3)';
+    resultEl.style.color = 'var(--gold)';
+    resultEl.innerHTML = '⚠️ Environment Status: Under Stress – Some resources are being overused';
+  } else {
+    resultEl.style.background = 'rgba(233,69,96,0.15)';
+    resultEl.style.borderColor = 'rgba(233,69,96,0.3)';
+    resultEl.style.color = 'var(--accent)';
+    resultEl.innerHTML = '🔴 Environment Status: Critical – Urgent action needed to save resources!';
+  }
+};
+
+// ===== RENDER FLASHCARDS (chapter) =====
+function renderFlashcardsSection(ch) {
+  const el = document.getElementById('sec-flashcards');
+  let state = { idx: 0, flipped: false };
+  
+  function getCard() {
+    return ch.flashcards[state.idx];
+  }
+  
+  function renderCard() {
+    const card = getCard();
+    el.innerHTML = `
+      <div class="flashcard-container" onclick="flipFC_ch()">
+        <div class="flashcard ${state.flipped ? 'flipped' : ''}" id="fc_ch_card">
+          <div class="flashcard-front">
+            <div class="flashcard-label">Question ${state.idx + 1} of ${ch.flashcards.length}</div>
+            <div class="flashcard-text">${card.q}</div>
+            <div class="flashcard-hint">👆 Tap to reveal answer</div>
+          </div>
+          <div class="flashcard-back">
+            <div class="flashcard-label">Answer</div>
+            <div class="flashcard-text">${card.a}</div>
+          </div>
+        </div>
+      </div>
+      <div class="flashcard-nav">
+        <button class="fc-btn" onclick="prevFC_ch()" ${state.idx === 0 ? 'disabled style="opacity:0.4"' : ''}>← Prev</button>
+        <span class="fc-counter">${state.idx + 1} / ${ch.flashcards.length}</span>
+        <button class="fc-btn" onclick="nextFC_ch()" ${state.idx === ch.flashcards.length - 1 ? 'disabled style="opacity:0.4"' : ''}>Next →</button>
+      </div>
+      <button class="btn-primary" onclick="markFCStudied()" style="width:100%">✅ Mark as Studied</button>
+    `;
+  }
+  
+  window.flipFC_ch = function() {
+    state.flipped = !state.flipped;
+    renderCard();
+  };
+  window.prevFC_ch = function() {
+    if (state.idx > 0) { state.idx--; state.flipped = false; renderCard(); }
+  };
+  window.nextFC_ch = function() {
+    if (state.idx < ch.flashcards.length - 1) { state.idx++; state.flipped = false; renderCard(); }
+  };
+  window.markFCStudied = function() {
+    appState.flashcardCounts[ch.id] = (appState.flashcardCounts[ch.id] || 0) + 1;
+    if (appState.progress[ch.id] < 100) {
+      appState.progress[ch.id] = Math.min((appState.progress[ch.id] || 0) + 10, 100);
+    }
+    saveState();
+    showToast('✅ Flashcard marked as studied!', 'success');
+  };
+  
+  renderCard();
+}
+
+// ===== RENDER QUIZ (chapter) =====
+function renderQuizSection(ch) {
+  const el = document.getElementById('sec-quiz');
+  let qIdx = 0;
+  let answers = {};
+  
+  function renderQ() {
+    const q = ch.quiz[qIdx];
+    el.innerHTML = `
+      <div class="quiz-box">
+        <div class="quiz-question-num">Question ${qIdx + 1} of ${ch.quiz.length}</div>
+        <div class="quiz-question-text">${q.q}</div>
+        <div class="quiz-options">
+          ${q.opts.map((opt, i) => `
+            <button class="quiz-option ${answers[qIdx] !== undefined ? (i === q.ans ? 'correct' : (i === answers[qIdx] ? 'wrong' : '')) : ''} ${answers[qIdx] !== undefined ? 'selected' : ''}" 
+                    onclick="answerQ_ch(${i})">
+              ${String.fromCharCode(65+i)}. ${opt}
+            </button>
+          `).join('')}
+        </div>
+        <div class="quiz-feedback ${answers[qIdx] !== undefined ? 'show ' + (answers[qIdx] === q.ans ? 'correct' : 'wrong') : ''}" id="qfeedback_ch">
+          ${answers[qIdx] !== undefined ? (answers[qIdx] === q.ans ? '✅ Correct! ' : '❌ Wrong! Correct: ' + q.opts[q.ans] + '. ') + q.exp : ''}
+        </div>
+      </div>
+      <div class="quiz-nav">
+        <button class="btn-secondary" onclick="prevQ_ch()" ${qIdx === 0 ? 'disabled style="opacity:0.4"' : ''}>← Previous</button>
+        ${qIdx < ch.quiz.length - 1 
+          ? `<button class="btn-primary" onclick="nextQ_ch()">Next →</button>` 
+          : `<button class="btn-primary" onclick="showScore_ch()">View Score 📊</button>`}
+      </div>
+    `;
+  }
+  
+  function showScore() {
+    const correct = Object.keys(answers).filter(k => answers[k] === ch.quiz[k].ans).length;
+    const pct = Math.round((correct / ch.quiz.length) * 100);
+    appState.quizScores[ch.id] = pct;
+    if (pct >= 60 && appState.progress[ch.id] < 100) {
+      appState.progress[ch.id] = Math.min((appState.progress[ch.id] || 0) + 20, 100);
+    }
+    saveState();
+    el.innerHTML = `
+      <div class="quiz-score-box show">
+        <div class="score-circle">${pct}%</div>
+        <div class="score-msg">${pct >= 80 ? '🌟 Excellent!' : pct >= 60 ? '👍 Good Job!' : '📚 Keep Studying!'}</div>
+        <div class="score-sub">You got ${correct} out of ${ch.quiz.length} questions correct.</div>
+        <button class="btn-primary" onclick="restartQuiz_ch()" style="margin-top:20px">🔄 Retake Quiz</button>
+      </div>
+    `;
+  }
+  
+  window.answerQ_ch = function(i) {
+    if (answers[qIdx] !== undefined) return;
+    answers[qIdx] = i;
+    renderQ();
+  };
+  window.prevQ_ch = function() { if (qIdx > 0) { qIdx--; renderQ(); } };
+  window.nextQ_ch = function() { if (qIdx < ch.quiz.length - 1) { qIdx++; renderQ(); } };
+  window.showScore_ch = showScore;
+  window.restartQuiz_ch = function() { qIdx = 0; answers = {}; renderQ(); };
+  
+  renderQ();
+}
+
+// ===== RENDER COMPETENCY =====
+function renderCompetency(ch) {
+  const el = document.getElementById('sec-competency');
+  let html = '';
+  ch.competency.forEach((item, i) => {
+    html += `
+      <div class="reflection-card">
+        <div style="font-size:11px;color:var(--purple);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px">🧪 Competency Challenge ${i+1}</div>
+        <div class="reflection-q">${item.q}</div>
+        <div style="background:var(--surface2);border-left:3px solid var(--purple);padding:12px;border-radius:0 8px 8px 0;margin-bottom:12px">
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">MODEL ANSWER:</div>
+          <div style="font-size:13px;line-height:1.7">${item.a}</div>
+        </div>
+        <textarea class="reflection-input" placeholder="Write your own answer..." id="comp_${ch.id}_${i}"></textarea>
+        <button class="save-note-btn" onclick="saveCompetencyNote(${ch.id}, ${i})">💾 Save My Answer</button>
+      </div>
+    `;
+  });
+  el.innerHTML = html;
+}
+
+window.saveCompetencyNote = function(chId, i) {
+  const val = document.getElementById(`comp_${chId}_${i}`)?.value;
+  if (!val) return;
+  const ch = CHAPTERS.find(c => c.id === chId);
+  appState.notes.push({
+    chapter: ch.title,
+    text: `[Competency ${i+1}] ${val}`,
+    date: new Date().toLocaleDateString()
+  });
+  saveState();
+  showToast('✅ Answer saved to Notes!', 'success');
+};
+
+// ===== RENDER REFLECTION =====
+function renderReflection(ch) {
+  const el = document.getElementById('sec-reflection');
+  let html = '';
+  ch.reflection.forEach((item, i) => {
+    html += `
+      <div class="reflection-card">
+        <div style="font-size:11px;color:var(--teal);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px">💭 Reflection ${i+1}</div>
+        <div class="reflection-q">${item.q}</div>
+        <textarea class="reflection-input" placeholder="Write your thoughts here..." id="ref_${ch.id}_${i}"></textarea>
+        <button class="save-note-btn" onclick="saveReflection(${ch.id}, ${i})">💾 Save</button>
+      </div>
+    `;
+  });
+  el.innerHTML = html;
+}
+
+window.saveReflection = function(chId, i) {
+  const val = document.getElementById(`ref_${chId}_${i}`)?.value;
+  if (!val) return;
+  const ch = CHAPTERS.find(c => c.id === chId);
+  appState.notes.push({
+    chapter: ch.title,
+    text: `[Reflection ${i+1}] ${val}`,
+    date: new Date().toLocaleDateString()
+  });
+  saveState();
+  showToast('✅ Reflection saved!', 'success');
+};
+
+// ===== RENDER CASE STUDY =====
+function renderCaseStudy(ch) {
+  const el = document.getElementById('sec-casestudy');
+  el.innerHTML = `
+    <div class="case-study-box">
+      <h4>📊 ${ch.caseStudy.title}</h4>
+      <p>${ch.caseStudy.content}</p>
+    </div>
+    <div class="case-activity">
+      <h5>🎯 Activities</h5>
+      ${ch.caseStudy.activities.map((a, i) => `<p>${i+1}. ${a}</p>`).join('')}
+    </div>
+    <div style="margin-top:16px">
+      <label style="font-size:13px;color:var(--text-muted)">Your Response:</label>
+      <textarea class="reflection-input" style="margin-top:8px" placeholder="Write your answers to the activities..." id="cs_${ch.id}"></textarea>
+      <button class="save-note-btn" onclick="saveCaseStudy(${ch.id})" style="margin-top:8px">💾 Save Response</button>
+    </div>
+  `;
+}
+
+window.saveCaseStudy = function(chId) {
+  const val = document.getElementById(`cs_${chId}`)?.value;
+  if (!val) return;
+  const ch = CHAPTERS.find(c => c.id === chId);
+  appState.notes.push({
+    chapter: ch.title,
+    text: `[Case Study] ${val}`,
+    date: new Date().toLocaleDateString()
+  });
+  if (appState.progress[chId] < 100) {
+    appState.progress[chId] = Math.min((appState.progress[chId] || 0) + 15, 100);
+  }
+  saveState();
+  showToast('✅ Case study response saved!', 'success');
+};
+
+// ===== GLOBAL FLASHCARDS =====
+function renderGlobalFlashcards() {
+  const filter = document.getElementById('fcFilter')?.value || 'all';
+  const el = document.getElementById('globalFlashcards');
+  const chapters = filter === 'all' ? CHAPTERS : CHAPTERS.filter(c => c.subject === filter);
+  const allCards = [];
+  chapters.forEach(ch => {
+    ch.flashcards.forEach(fc => allCards.push({ ...fc, chapter: ch.title, subject: ch.subject }));
+  });
+  
+  let idx = parseInt(el.getAttribute('data-idx') || '0');
+  if (idx >= allCards.length) idx = 0;
+  
+  function render() {
+    const card = allCards[idx];
+    const flipped = el.getAttribute('data-flipped') === '1';
+    el.innerHTML = `
+      <div class="flashcard-container" onclick="flipGFC()">
+        <div class="flashcard ${flipped ? 'flipped' : ''}">
+          <div class="flashcard-front">
+            <div class="flashcard-label">${card.chapter}</div>
+            <div class="flashcard-text">${card.q}</div>
+            <div class="flashcard-hint">👆 Tap to flip</div>
+          </div>
+          <div class="flashcard-back">
+            <div class="flashcard-label">Answer</div>
+            <div class="flashcard-text">${card.a}</div>
+          </div>
+        </div>
+      </div>
+      <div class="flashcard-nav">
+        <button class="fc-btn" onclick="prevGFC()" ${idx === 0 ? 'disabled style="opacity:0.4"' : ''}>← Prev</button>
+        <span class="fc-counter">${idx + 1} / ${allCards.length}</span>
+        <button class="fc-btn" onclick="nextGFC()" ${idx === allCards.length - 1 ? 'disabled style="opacity:0.4"' : ''}>Next →</button>
+      </div>
+    `;
+    el.setAttribute('data-idx', idx);
+    el.setAttribute('data-flipped', '0');
+  }
+  
+  window.flipGFC = function() {
+    const flipped = el.getAttribute('data-flipped') === '1';
+    el.setAttribute('data-flipped', flipped ? '0' : '1');
+    const card = el.querySelector('.flashcard');
+    if (card) card.classList.toggle('flipped');
+    if (!flipped) {
+      appState.flashcardCounts['global'] = (appState.flashcardCounts['global'] || 0) + 1;
+      saveState();
+    }
+  };
+  window.prevGFC = function() { if (idx > 0) { idx--; el.setAttribute('data-flipped','0'); render(); } };
+  window.nextGFC = function() { if (idx < allCards.length - 1) { idx++; el.setAttribute('data-flipped','0'); render(); } };
+  
+  el.setAttribute('data-idx', '0');
+  render();
+}
+
+// ===== QUIZ MODE (global) =====
+function populateSelects() {
+  const qSelect = document.getElementById('quizChapterSel');
+  const nSelect = document.getElementById('notesChapter');
+  CHAPTERS.forEach(ch => {
+    if (qSelect) {
+      const opt = document.createElement('option');
+      opt.value = ch.id;
+      opt.textContent = `Ch.${ch.id}: ${ch.title}`;
+      qSelect.appendChild(opt);
+    }
+    if (nSelect) {
+      const opt = document.createElement('option');
+      opt.value = ch.id;
+      opt.textContent = `Ch.${ch.id}: ${ch.title}`;
+      nSelect.appendChild(opt);
+    }
+  });
+}
+
+function initQuizMode() {
+  const selVal = document.getElementById('quizChapterSel')?.value || 'all';
+  let questions = [];
+  if (selVal === 'all') {
+    CHAPTERS.forEach(ch => {
+      ch.quiz.forEach(q => questions.push({ ...q, chapter: ch.title, chId: ch.id }));
+    });
+  } else {
+    const ch = CHAPTERS.find(c => c.id === parseInt(selVal));
+    if (ch) ch.quiz.forEach(q => questions.push({ ...q, chapter: ch.title, chId: ch.id }));
+  }
+  // Shuffle
+  questions = questions.sort(() => Math.random() - 0.5);
+  appState.quizPool = questions;
+  appState.quizCurrentQ = 0;
+  appState.quizAnswers = {};
+  renderQuizMode();
+}
+
+function renderQuizMode() {
+  const el = document.getElementById('quizModeContainer');
+  const questions = appState.quizPool;
+  if (!questions.length) { el.innerHTML = '<p style="color:var(--text-muted)">No questions available.</p>'; return; }
+  
+  const qIdx = appState.quizCurrentQ;
+  if (qIdx >= questions.length) {
+    // Show final score
+    const correct = Object.keys(appState.quizAnswers).filter(k => appState.quizAnswers[k] === questions[k].ans).length;
+    const pct = Math.round((correct / questions.length) * 100);
+    el.innerHTML = `
+      <div class="quiz-score-box show">
+        <div class="score-circle">${pct}%</div>
+        <div class="score-msg">${pct >= 80 ? '🌟 Excellent!' : pct >= 60 ? '👍 Good!' : '📚 Keep Practicing!'}</div>
+        <div class="score-sub">Score: ${correct}/${questions.length} correct</div>
+        <button class="btn-primary" onclick="initQuizMode()" style="margin-top:16px">🔄 New Quiz</button>
+      </div>
+    `;
+    return;
+  }
+  
+  const q = questions[qIdx];
+  const answered = appState.quizAnswers[qIdx];
+  
+  el.innerHTML = `
+    <div class="quiz-box">
+      <div class="quiz-question-num">Q${qIdx+1} of ${questions.length} | ${q.chapter}</div>
+      <div class="quiz-question-text">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt, i) => `
+          <button class="quiz-option ${answered !== undefined ? (i === q.ans ? 'correct' : (i === answered ? 'wrong' : '')) : ''} ${answered !== undefined ? 'selected' : ''}" 
+                  onclick="answerQuizMode(${i})">
+            ${String.fromCharCode(65+i)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      ${answered !== undefined ? `
+        <div class="quiz-feedback show ${answered === q.ans ? 'correct' : 'wrong'}">
+          ${answered === q.ans ? '✅ Correct! ' : '❌ Wrong! Correct: ' + q.opts[q.ans] + '. '} ${q.exp}
+        </div>
+      ` : ''}
+    </div>
+    <div class="quiz-nav">
+      ${answered !== undefined ? `<button class="btn-primary" onclick="nextQuizMode()">Next →</button>` : '<span></span>'}
+    </div>
+  `;
+}
+
+window.answerQuizMode = function(i) {
+  if (appState.quizAnswers[appState.quizCurrentQ] !== undefined) return;
+  appState.quizAnswers[appState.quizCurrentQ] = i;
+  renderQuizMode();
+};
+window.nextQuizMode = function() {
+  appState.quizCurrentQ++;
+  renderQuizMode();
+};
+
+// ===== MAP INTERACTIONS =====
+function mapClick(e) {
+  const info = document.getElementById('mapInfo');
+  const regions = [
+    {label:'Jammu & Kashmir', text:'📍 J&K – The Himalayan region. Known for Dal Lake, Srinagar, mountains, rivers, and biodiversity.'},
+    {label:'Northern India', text:'📍 The Indo-Gangetic Plain – Most fertile region in India. Watered by rivers Ganga, Yamuna. Major agricultural area.'},
+    {label:'Southern India', text:'📍 Deccan Plateau – Ancient crystalline rocks, minerals, and the source of many rivers.'},
+    {label:'Coastal India', text:'📍 Indian Coastline – About 7,516 km long. Major ports, fishing, and trade.'}
+  ];
+  const region = regions[Math.floor(Math.random() * regions.length)];
+  info.innerHTML = `<strong style="color:var(--gold)">${region.label}</strong><br>${region.text}`;
+}
+
+function renderResourceBars() {
+  const el = document.getElementById('resourceBars');
+  if (!el) return;
+  const resources = [
+    { label: '🌲 Forest Cover', val: 68, color: '#27ae60' },
+    { label: '💧 Freshwater', val: 52, color: '#3498db' },
+    { label: '⛏️ Coal Reserves', val: 78, color: '#95a5a6' },
+    { label: '☀️ Solar Potential', val: 85, color: '#f39c12' },
+    { label: '🌾 Agricultural Land', val: 60, color: '#e67e22' }
+  ];
+  el.innerHTML = resources.map(r => `
+    <div class="resource-item">
+      <div class="resource-label"><span>${r.label}</span><span>${r.val}%</span></div>
+      <div class="resource-bar">
+        <div class="resource-fill" style="width:${r.val}%;background:linear-gradient(90deg,${r.color},${r.color}88)"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function showClimate(type) {
+  const info = document.getElementById('climateInfo');
+  const data = {
+    tropical: { title:'☀️ Tropical Climate', text:'Found in South India and coastal areas. Hot and humid throughout the year. Heavy rainfall during monsoon. Supports diverse forests and agriculture. States: Kerala, Tamil Nadu, Karnataka (coastal).' },
+    monsoon: { title:'🌧️ Monsoon Climate', text:'Most of India experiences monsoon climate. Rain from June to September. Dry winters. Farmers depend on monsoon for crops. J&K: Monsoon affects parts of Jammu region.' },
+    alpine: { title:'❄️ Alpine Climate', text:'Found in Himalayan regions including J&K, Himachal Pradesh, and Uttarakhand. Very cold winters with heavy snowfall. Short summer. Glaciers and snowfields. Home to unique alpine flora and fauna.' }
+  };
+  const d = data[type];
+  info.style.display = 'block';
+  info.innerHTML = `<strong style="color:var(--gold)">${d.title}</strong><br><br>${d.text}`;
+}
+
+// ===== MAIN TIMELINE =====
+function renderMainTimeline() {
+  const el = document.getElementById('mainTimeline');
+  if (!el) return;
+  const allEvents = [
+    { year: '700 CE', event: 'Rise of Rajput Kingdoms' },
+    { year: '850 CE', event: 'Chola Empire at its height' },
+    { year: '1000 CE', event: 'Mahmud of Ghazni raids' },
+    { year: '1192 CE', event: 'Second Battle of Tarain' },
+    { year: '1206 CE', event: 'Delhi Sultanate – Slave Dynasty' },
+    { year: '1290 CE', event: 'Khalji Dynasty begins' },
+    { year: '1320 CE', event: 'Tughlaq Dynasty' },
+    { year: '1398 CE', event: 'Timur\'s invasion of India' },
+    { year: '1451 CE', event: 'Lodi Dynasty' },
+    { year: '1526 CE', event: 'Mughal Empire – Babur wins Panipat' },
+    { year: '1556 CE', event: 'Akbar\'s reign begins' },
+    { year: '1600 CE', event: 'East India Company founded' },
+    { year: '1632 CE', event: 'Taj Mahal construction begins' },
+    { year: '1707 CE', event: 'Decline of Mughal Empire' }
+  ];
+  el.innerHTML = allEvents.map(item => `
+    <div class="timeline-item">
+      <div class="timeline-content">
+        <div class="timeline-year">${item.year}</div>
+        <div class="timeline-event">${item.event}</div>
+      </div>
+      <div class="timeline-dot"></div>
+    </div>
+  `).join('');
+}
+
+// ===== NOTES =====
+function saveNote() {
+  const text = document.getElementById('notesArea')?.value?.trim();
+  const chVal = document.getElementById('notesChapter')?.value;
+  if (!text) { showToast('⚠️ Write something first!', 'error'); return; }
+  const ch = CHAPTERS.find(c => c.id === parseInt(chVal));
+  appState.notes.push({
+    chapter: ch ? ch.title : 'General',
+    text,
+    date: new Date().toLocaleDateString()
+  });
+  document.getElementById('notesArea').value = '';
+  saveState();
+  renderSavedNotes();
+  showToast('✅ Note saved!', 'success');
+}
+
+function renderSavedNotes() {
+  const el = document.getElementById('savedNotesList');
+  if (!el) return;
+  if (!appState.notes.length) {
+    el.innerHTML = '<p style="color:var(--text-muted);font-size:13px">No saved notes yet.</p>';
+    return;
+  }
+  el.innerHTML = appState.notes.map((n, i) => `
+    <div class="saved-note">
+      <div class="saved-note-meta">${n.chapter} • ${n.date}</div>
+      <div class="saved-note-text">${n.text}</div>
+      <button class="saved-note-del" onclick="deleteNote(${i})">🗑️</button>
+    </div>
+  `).join('');
+}
+
+window.deleteNote = function(i) {
+  appState.notes.splice(i, 1);
+  saveState();
+  renderSavedNotes();
+};
+
+// ===== RANDOM QUESTION =====
+let _randomCurrent = null;
+function generateRandom() {
+  const allQ = [];
+  CHAPTERS.forEach(ch => {
+    ch.quiz.forEach(q => allQ.push({ ...q, chapter: ch.title }));
+    ch.competency.forEach(q => allQ.push({ q: q.q, a: q.a, chapter: ch.title, isComp: true }));
+    ch.reflection.forEach(q => allQ.push({ q: q.q, a: 'Open-ended – Think and reflect on this question.', chapter: ch.title }));
+  });
+  _randomCurrent = allQ[Math.floor(Math.random() * allQ.length)];
+  document.getElementById('randomQText').textContent = _randomCurrent.q;
+  document.getElementById('randomQSource').textContent = '📚 ' + _randomCurrent.chapter;
+  document.getElementById('randomAnswerBox').style.display = 'none';
+}
+
+function showRandomAnswer() {
+  if (!_randomCurrent) { generateRandom(); return; }
+  const el = document.getElementById('randomAnswerBox');
+  el.style.display = 'block';
+  el.innerHTML = _randomCurrent.isComp
+    ? `<strong>Model Answer:</strong><br><br>${_randomCurrent.a}`
+    : _randomCurrent.opts 
+      ? `<strong>Correct Answer:</strong> ${_randomCurrent.opts[_randomCurrent.ans]}<br><br><em>${_randomCurrent.exp}</em>`
+      : `<strong>Suggested Response:</strong><br><br>${_randomCurrent.a || 'Reflect on this question based on what you\'ve learned.'}`;
+}
+
+// ===== PROGRESS =====
+function updateStats() {
+  const chapsDone = Object.values(appState.progress).filter(v => v >= 50).length;
+  const quizTotal = Object.values(appState.quizScores);
+  const avgQuiz = quizTotal.length ? Math.round(quizTotal.reduce((a,b)=>a+b,0)/quizTotal.length) : 0;
+  const fcTotal = Object.values(appState.flashcardCounts).reduce((a,b)=>a+b,0);
+  
+  const el1 = document.getElementById('statsChapters');
+  const el2 = document.getElementById('statsQuiz');
+  const el3 = document.getElementById('statsCards');
+  if (el1) el1.textContent = chapsDone;
+  if (el2) el2.textContent = avgQuiz + '%';
+  if (el3) el3.textContent = fcTotal;
+}
+
+function renderProgress() {
+  const el = document.getElementById('progressChapters');
+  const pd1 = document.getElementById('pdChapters');
+  const pd2 = document.getElementById('pdQuizzes');
+  const pd3 = document.getElementById('pdFlash');
+  const pd4 = document.getElementById('pdNotes');
+  
+  const chapsDone = Object.values(appState.progress).filter(v => v >= 50).length;
+  const quizDone = Object.keys(appState.quizScores).length;
+  const fcDone = Object.values(appState.flashcardCounts).reduce((a,b)=>a+b,0);
+  const notesDone = appState.notes.length;
+  
+  if (pd1) pd1.textContent = `${chapsDone}/10`;
+  if (pd2) pd2.textContent = quizDone;
+  if (pd3) pd3.textContent = fcDone;
+  if (pd4) pd4.textContent = notesDone;
+  
+  if (!el) return;
+  const colors = { history: '#f5a623', geography: '#27ae60', civics: '#8e44ad' };
+  el.innerHTML = CHAPTERS.map(ch => `
+    <div class="progress-ch-item">
+      <div class="progress-ch-num" style="background:${colors[ch.subject]}22;color:${colors[ch.subject]}">${ch.id}</div>
+      <div class="progress-ch-info">
+        <div class="progress-ch-name">${ch.title}</div>
+        <div class="progress-ch-bar">
+          <div class="progress-ch-fill" style="width:${appState.progress[ch.id]||0}%"></div>
+        </div>
+      </div>
+      <div class="progress-ch-pct">${appState.progress[ch.id]||0}%</div>
+    </div>
+  `).join('');
+}
+
+function renderBadges() {
+  const el = document.getElementById('badgesGrid');
+  if (!el) return;
+  const chapsDone = Object.values(appState.progress).filter(v => v >= 50).length;
+  const quizTotal = Object.values(appState.quizScores);
+  const avgQuiz = quizTotal.length ? Math.round(quizTotal.reduce((a,b)=>a+b,0)/quizTotal.length) : 0;
+  const fcTotal = Object.values(appState.flashcardCounts).reduce((a,b)=>a+b,0);
+  const notesDone = appState.notes.length;
+  
+  const badges = [
+    { icon: '🚀', name: 'Explorer', desc: 'Open first chapter', earned: chapsDone >= 1 },
+    { icon: '📚', name: 'Scholar', desc: '5+ chapters done', earned: chapsDone >= 5 },
+    { icon: '🌟', name: 'Champion', desc: 'All 10 chapters', earned: chapsDone >= 10 },
+    { icon: '🧠', name: 'Quiz Ace', desc: 'Quiz score 80%+', earned: avgQuiz >= 80 },
+    { icon: '🃏', name: 'Card Master', desc: '20+ flashcards studied', earned: fcTotal >= 20 },
+    { icon: '✍️', name: 'Note Taker', desc: 'Saved 5+ notes', earned: notesDone >= 5 },
+    { icon: '🏺', name: 'Historian', desc: 'All History chapters', earned: [1,2,3,4].every(id => (appState.progress[id]||0) >= 50) },
+    { icon: '🌍', name: 'Geographer', desc: 'All Geography chapters', earned: [5,6,7].every(id => (appState.progress[id]||0) >= 50) },
+    { icon: '⚖️', name: 'Civic Star', desc: 'All Civics chapters', earned: [8,9,10].every(id => (appState.progress[id]||0) >= 50) }
+  ];
+  
+  el.innerHTML = badges.map(b => `
+    <div class="badge-card ${b.earned ? 'earned' : ''}">
+      <div class="badge-icon">${b.icon}</div>
+      <div class="badge-name">${b.name}</div>
+      <div class="badge-desc">${b.desc}</div>
+    </div>
+  `).join('');
+}
+
+// ===== BOOKMARKS =====
+function bookmarkChapter() {
+  const id = appState.currentChapterId;
+  if (!id) return;
+  const idx = appState.bookmarks.indexOf(id);
+  if (idx === -1) {
+    appState.bookmarks.push(id);
+    document.getElementById('bookmarkBtn').textContent = '🔖✅';
+    showToast('✅ Chapter bookmarked!', 'success');
+  } else {
+    appState.bookmarks.splice(idx, 1);
+    document.getElementById('bookmarkBtn').textContent = '🔖';
+    showToast('Bookmark removed.', '');
+  }
+  saveState();
+}
+
+// ===== THEME =====
+function toggleTheme() {
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  if (isLight) {
+    document.documentElement.removeAttribute('data-theme');
+    document.getElementById('themeBtn').textContent = '🌙 Dark';
+    appState.theme = 'dark';
+  } else {
+    document.documentElement.setAttribute('data-theme', 'light');
+    document.getElementById('themeBtn').textContent = '☀️ Light';
+    appState.theme = 'light';
+  }
+  saveState();
+}
+
+// ===== RESET =====
+function resetProgress() {
+  if (!confirm('Reset all progress? This cannot be undone.')) return;
+  appState.progress = {};
+  appState.quizScores = {};
+  appState.flashcardCounts = {};
+  saveState();
+  renderChapterCards();
+  renderAllChapters();
+  renderProgress();
+  renderBadges();
+  updateStats();
+  showToast('🔄 Progress reset!', '');
+}
+
+// ===== TOAST =====
+function showToast(msg, type) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = 'toast show ' + (type || '');
+  setTimeout(() => { toast.className = 'toast'; }, 2500);
+}
+
+// ===== PWA =====
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBanner').classList.add('show');
+});
+document.getElementById('installBtn').addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const result = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    document.getElementById('installBanner').classList.remove('show');
+  }
+});
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js').catch(() => {});
+}
+
+// ===== INIT =====
+createParticles();
+loadState();
+generateRandom();
+
+// Auto show random q on load if tab open
+window.addEventListener('load', () => {
+  // scroll to top
+  window.scrollTo(0, 0);
+});
+</script>
+</body>
+</html>

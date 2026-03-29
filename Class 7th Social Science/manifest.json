@@ -1,0 +1,40 @@
+{
+  "name": "JKBOSE Class 7 Social Science Learning App",
+  "short_name": "SST Class 7",
+  "description": "Interactive JKBOSE Class 7 Social Science App by Mateen Yousuf",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a0a1a",
+  "theme_color": "#0f3460",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='24' fill='%230f3460'/><text y='130' x='96' font-size='120' text-anchor='middle'>📚</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='48' fill='%230f3460'/><text y='360' x='256' font-size='320' text-anchor='middle'>📚</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education"],
+  "lang": "en",
+  "scope": "./",
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Quiz Mode",
+      "url": "./index.html#quiz",
+      "description": "Jump to Quiz Mode"
+    },
+    {
+      "name": "Flashcards",
+      "url": "./index.html#flashcards",
+      "description": "Open Flashcards"
+    }
+  ]
+}
